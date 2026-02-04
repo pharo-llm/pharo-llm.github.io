@@ -1,4 +1,4 @@
-# pharo-llm.github.io
+# Pharo-LLM
 
 Simple static site for the Pharo LLM project. It serves a single-page site with
 HTML, CSS, and JavaScript.

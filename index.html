@@ -6,9 +6,11 @@
   <meta name="description" content="LLM engineering on Pharo: agents, evaluation, RAG, and developer tools built for live programming." />
   <title>Pharo-LLM</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="icon" type="image/x-icon" href="pharo-llm.ico">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/x-icon" href="pharo-llm.ico">
 </head>
 
 <body>
@@ -119,6 +121,37 @@
 
   <main id="main">
 
+    <!-- HERO / INTRO -->
+    <section class="hero">
+      <div class="container">
+        <span class="pill">
+          <span class="pill__dot"></span>
+          LLMs in Pharo
+        </span>
+
+        <h1 class="hero__title">
+          Pharo-LLM brings
+          <span class="hero__titleAccent">Large Language Models</span>
+          to Pharo
+        </h1>
+
+        <p class="hero__subtitle">
+          Pharo-LLM is a set of tools for using Large Language Models (LLMs)
+          inside the Pharo environment. It provides the core pieces needed
+          to build LLM-assisted tools in Pharo.
+        </p>
+
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="https://github.com/pharo-llm">
+            GitHub Repo
+          </a>
+
+          <a class="btn" href="https://huggingface.co/pharo-llm">
+            Hugging Face
+          </a>
+        </div>
+      </div>
+    </section>
     <!-- HIGHLIGHTS -->
     <section class="section" id="highlights">
       <div class="container">
@@ -179,25 +212,20 @@
 
 
     <!-- FOOTER -->
-    <footer class="footer">
-      <div class="container footer__inner">
-        <div class="footer__left">
-          <div class="brand brand--footer">
-            <span class="brand__mark" aria-hidden="true">◎</span>
-            <span class="brand__text">Pharo-LLM</span>
-          </div>
-          <p class="footer__small">
-            © <span id="year"></span> Pharo-LLM
-          </p>
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__left">
+        <div class="brand brand--footer">
+          <span class="brand__mark">◎</span>
+          <span class="brand__text">Pharo-LLM</span>
         </div>
-
-        <div class="footer__right">
-          <a class="footer__link" href="#top">Back to top</a>
-          <a class="footer__link" href="#learn">Docs</a>
-          <a class="footer__link" href="#community">Community</a>
-        </div>
+        <p class="footer__small">
+          <span id="year"></span> Pharo-LLM •
+          <a href="LICENSE" target="_blank">MIT License</a>
+        </p>
       </div>
-    </footer>
+    </div>
+  </footer>
   </main>
 
   <script src="script.js"></script>

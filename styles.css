@@ -575,10 +575,13 @@ pre, code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 
 }
 .footer__inner{
   display:flex;
-  align-items:flex-start;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 16px;
 }
+
 .footer__small{ margin: 8px 0 0; color: var(--muted); font-size: 13px; }
 .footer__right{ display:flex; gap: 12px; flex-wrap: wrap; }
 .footer__link{ color: var(--muted); padding: 8px 10px; border-radius: 12px; }
