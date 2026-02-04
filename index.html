@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="LLM engineering on Pharo: agents, evaluation, RAG, and developer tools built for live programming." />
+  <title>Pharo-LLM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+<header class="header" id="top" role="banner">
+  <div class="container header__inner">
+    
+    <!-- Brand -->
+    <a class="brand" href="#top" aria-label="Pharo-LLM home">
+      <span class="brand__mark" aria-hidden="true">◎</span>
+      <span class="brand__text">Pharo-LLM</span>
+    </a>
+
+    <!-- Navigation -->
+    <nav class="nav" aria-label="Primary navigation">
+      
+      <!-- Mobile toggle -->
+      <button
+        class="nav__toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="navMenu"
+        aria-label="Toggle menu"
+      >
+        <span class="nav__toggleLines" aria-hidden="true"></span>
+      </button>
+
+      <!-- Menu -->
+      <div class="nav__menu" id="navMenu" role="menu">
+
+          <!-- theme button -->
+        <button class="themeBtn themeBtn--small" id="themeBtn" type="button" aria-label="Toggle theme">
+          ☀️
+        </button>
+  
+        <!-- GitHub -->
+        <a
+          class="nav__link nav__link--icon"
+          href="https://github.com/pharo-llm"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub profile (opens in new tab)"
+          role="menuitem"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <title>GitHub</title>
+            <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
+            0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+            -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+            .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
+            0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
+            0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27
+            1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12
+            .51.56.82 1.27.82 2.15
+            0 3.07-1.87 3.75-3.65 3.95
+            .29.25.54.73.54 1.48
+            0 1.07-.01 1.93-.01 2.2
+            0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8
+            c0-4.42-3.58-8-8-8Z"/>
+          </svg>
+        </a>
+
+        <!-- Hugging Face -->
+        <a
+          class="nav__link nav__link--icon"
+          href="https://huggingface.co/pharo-llm"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Hugging Face profile (opens in new tab)"
+          role="menuitem"
+        >
+          <span aria-hidden="true">🤗</span>
+        </a>
+
+        <!-- Discord -->
+        <a
+          class="nav__link nav__link--icon"
+          href="https://discord.gg/pharo-llm"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Discord server (opens in new tab)"
+          role="menuitem"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <title>Discord</title>
+            <path d="M20.317 4.369A19.791 19.791 0 0 0 16.558 3c-.161.287-.346.673-.474.976a18.27 18.27 0 0 0-8.168 0 9.587 9.587 0 0 0-.48-.976A19.736 19.736 0 0 0 3.674 4.37C1.343 7.847.708 11.24.96 14.583a19.9 19.9 0 0 0 5.99 3.055c.484-.665.915-1.37 1.286-2.111-.705-.265-1.378-.593-2.013-.976.168-.124.332-.252.49-.385 3.877 1.823 8.077 1.823 11.908 0 .16.133.324.261.492.385-.635.383-1.31.711-2.015.976.372.741.803 1.446 1.287 2.111a19.86 19.86 0 0 0 5.99-3.055c.294-3.876-.635-7.24-2.058-10.214zM8.02 12.278c-1.182 0-2.15-1.085-2.15-2.419 0-1.333.95-2.418 2.15-2.418 1.208 0 2.177 1.094 2.15 2.418 0 1.334-.95 2.419-2.15 2.419zm7.96 0c-1.182 0-2.15-1.085-2.15-2.419 0-1.333.95-2.418 2.15-2.418 1.208 0 2.177 1.094 2.15 2.418 0 1.334-.941 2.419-2.15 2.419z"/>
+          </svg>
+        </a>
+
+
+      </div>
+    </nav>
+  </div>
+</header>
+
+  <main id="main">
+
+    <!-- HIGHLIGHTS -->
+    <section class="section" id="highlights">
+      <div class="container">
+        <div class="section__head">
+          <h2 class="section__title">Projects</h2>
+          <p class="section__subtitle">
+            Explore some Pharo + LLM projects.
+          </p>
+        </div>
+
+        <div class="grid3">
+          <!-- ChatPharo -->
+          <article class="card">
+            <h3 class="card__title">ChatPharo</h3>
+            <p class="card__text">
+              Conversational AI inside Pharo for interactive exploration and development.
+            </p>
+            <a class="card__link" href="https://pharo-llm.github.io/chatpharo/">
+              Learn more →
+            </a>
+          </article>
+
+          <!-- Pharo-Copilot -->
+          <article class="card">
+            <h3 class="card__title">Pharo-Copilot</h3>
+            <p class="card__text">
+              AI-assisted coding companion integrated into the Pharo environment.
+            </p>
+            <a class="card__link" href="https://pharo-llm.github.io/pharo-copilot/">
+              Learn more →
+            </a>
+          </article>
+
+          <!-- PharoInfer -->
+          <article class="card">
+            <h3 class="card__title">PharoInfer</h3>
+            <p class="card__text">
+              Inference and analysis tools powered by language models in Pharo.
+            </p>
+            <a class="card__link" href="https://pharo-llm.github.io/pharo-infer/">
+              Learn more →
+            </a>
+          </article>
+
+          <!-- Etc card -->
+          <article class="card">
+            <h3 class="card__title">More projects…</h3>
+            <p class="card__text">
+              More projects...
+            </p>
+            <a class="card__link" href="https://github.com/orgs/pharo-llm/repositories">
+              See all projects →
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div class="footer__left">
+          <div class="brand brand--footer">
+            <span class="brand__mark" aria-hidden="true">◎</span>
+            <span class="brand__text">Pharo-LLM</span>
+          </div>
+          <p class="footer__small">
+            © <span id="year"></span> Pharo-LLM
+          </p>
+        </div>
+
+        <div class="footer__right">
+          <a class="footer__link" href="#top">Back to top</a>
+          <a class="footer__link" href="#learn">Docs</a>
+          <a class="footer__link" href="#community">Community</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
