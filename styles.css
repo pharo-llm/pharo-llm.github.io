@@ -265,13 +265,12 @@ pre, code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 
 .dot--g{ background: var(--ok); }
 .glass__title{ margin-left: 6px; font-size: 13px; color: var(--muted); flex: 1; }
 .themeBtn{
-  border: 1px solid var(--line);
-  background: var(--panel);
-  color: var(--text);
-  border-radius: 12px;
-  padding: 8px 10px;
-  cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: 6px;
+  font-size: 18px;
 }
+
 .themeBtn:hover{ background: var(--panel2); }
 
 .glass__body{ padding: 14px; }
