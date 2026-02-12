@@ -79,76 +79,61 @@
     return false;
   };
 
-  // ===== TOKEN STUDIO =====
-  const TOKEN_FILE_KEY = "tokenStudioFile";
-  const DEFAULT_TOKEN = "376e7c52-72a5-41c7-b798-937e52ec91f2";
-  const generatedToken = document.getElementById("generatedToken");
-  const tokenFile = document.getElementById("tokenFile");
-  const tokenStatus = document.getElementById("tokenStatus");
-  const generateTokenBtn = document.getElementById("generateTokenBtn");
-  const copyTokenBtn = document.getElementById("copyTokenBtn");
+  // ===== TOKEN STUDIO MINIMAL =====
 
-  function createToken() {
-    if (window.crypto?.randomUUID) {
-      return window.crypto.randomUUID();
+  const genBtn = document.getElementById("generateTokenBtn");
+  const addBtn = document.getElementById("addTokenBtn");
+  const tokenView = document.getElementById("generatedToken");
+  const status = document.getElementById("tokenStatus");
+
+  let tokensFileHandle = null;
+
+  // Generate UUID
+  genBtn?.addEventListener("click", () => {
+    const token = crypto.randomUUID();
+    tokenView.textContent = token;
+    status.textContent = "Token generated.";
+  });
+
+  // Choose file once
+  async function getFileHandle() {
+    if (tokensFileHandle) return tokensFileHandle;
+
+    tokensFileHandle = await window.showSaveFilePicker({
+      suggestedName: "tokens.txt",
+      types: [
+        {
+          description: "Text file",
+          accept: { "text/plain": [".txt"] },
+        },
+      ],
+    });
+
+    return tokensFileHandle;
+  }
+
+  // Add token to file
+  addBtn?.addEventListener("click", async () => {
+    const token = tokenView.textContent.trim();
+
+    if (!token || token === "—") {
+      status.textContent = "Generate a token first.";
+      return;
     }
 
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
-      const random = Math.floor(Math.random() * 16);
-      const value = char === "x" ? random : (random & 0x3) | 0x8;
-      return value.toString(16);
-    });
-  }
+    try {
+      const handle = await getFileHandle();
+      const file = await handle.getFile();
+      const oldText = await file.text();
 
-  function setStatus(message) {
-    if (tokenStatus) {
-      tokenStatus.textContent = message;
+      const writable = await handle.createWritable();
+      await writable.write(oldText + token + "\n");
+      await writable.close();
+
+      status.textContent = "Token added to file.";
+    } catch (err) {
+      status.textContent = "File write canceled or unsupported.";
     }
-  }
+  });
 
-  function getCurrentToken() {
-    return generatedToken?.textContent?.trim() || DEFAULT_TOKEN;
-  }
-
-  function appendTokenToFile(token) {
-    if (!tokenFile) return;
-    const tokens = tokenFile.value
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean);
-
-    if (!tokens.includes(token)) {
-      tokens.push(token);
-    }
-
-    tokenFile.value = tokens.join("\n");
-    localStorage.setItem(TOKEN_FILE_KEY, tokenFile.value);
-  }
-
-  if (tokenFile) {
-    const savedTokens = localStorage.getItem(TOKEN_FILE_KEY);
-    tokenFile.value = savedTokens && savedTokens.trim() ? savedTokens : DEFAULT_TOKEN;
-  }
-
-  if (generateTokenBtn && generatedToken) {
-    generateTokenBtn.addEventListener("click", () => {
-      generatedToken.textContent = createToken();
-      setStatus("New token generated. Copy it to add it to the website token file.");
-    });
-  }
-
-  if (copyTokenBtn) {
-    copyTokenBtn.addEventListener("click", async () => {
-      const token = getCurrentToken();
-
-      try {
-        await navigator.clipboard.writeText(token);
-        appendTokenToFile(token);
-        setStatus("Token copied and added to tokens.txt successfully.");
-      } catch (error) {
-        appendTokenToFile(token);
-        setStatus("Token added to tokens.txt, but clipboard access is not available in this browser.");
-      }
-    });
-  }
 })();
