@@ -78,4 +78,77 @@
     event.target.reset();
     return false;
   };
+
+  // ===== TOKEN STUDIO =====
+  const TOKEN_FILE_KEY = "tokenStudioFile";
+  const DEFAULT_TOKEN = "376e7c52-72a5-41c7-b798-937e52ec91f2";
+  const generatedToken = document.getElementById("generatedToken");
+  const tokenFile = document.getElementById("tokenFile");
+  const tokenStatus = document.getElementById("tokenStatus");
+  const generateTokenBtn = document.getElementById("generateTokenBtn");
+  const copyTokenBtn = document.getElementById("copyTokenBtn");
+
+  function createToken() {
+    if (window.crypto?.randomUUID) {
+      return window.crypto.randomUUID();
+    }
+
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
+      const random = Math.floor(Math.random() * 16);
+      const value = char === "x" ? random : (random & 0x3) | 0x8;
+      return value.toString(16);
+    });
+  }
+
+  function setStatus(message) {
+    if (tokenStatus) {
+      tokenStatus.textContent = message;
+    }
+  }
+
+  function getCurrentToken() {
+    return generatedToken?.textContent?.trim() || DEFAULT_TOKEN;
+  }
+
+  function appendTokenToFile(token) {
+    if (!tokenFile) return;
+    const tokens = tokenFile.value
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (!tokens.includes(token)) {
+      tokens.push(token);
+    }
+
+    tokenFile.value = tokens.join("\n");
+    localStorage.setItem(TOKEN_FILE_KEY, tokenFile.value);
+  }
+
+  if (tokenFile) {
+    const savedTokens = localStorage.getItem(TOKEN_FILE_KEY);
+    tokenFile.value = savedTokens && savedTokens.trim() ? savedTokens : DEFAULT_TOKEN;
+  }
+
+  if (generateTokenBtn && generatedToken) {
+    generateTokenBtn.addEventListener("click", () => {
+      generatedToken.textContent = createToken();
+      setStatus("New token generated. Copy it to add it to the website token file.");
+    });
+  }
+
+  if (copyTokenBtn) {
+    copyTokenBtn.addEventListener("click", async () => {
+      const token = getCurrentToken();
+
+      try {
+        await navigator.clipboard.writeText(token);
+        appendTokenToFile(token);
+        setStatus("Token copied and added to tokens.txt successfully.");
+      } catch (error) {
+        appendTokenToFile(token);
+        setStatus("Token added to tokens.txt, but clipboard access is not available in this browser.");
+      }
+    });
+  }
 })();

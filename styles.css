@@ -559,6 +559,52 @@ pre, code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 
 .textarea{ min-height: 120px; resize: vertical; }
 .form__note{ margin: 10px 0 0; color: var(--faint); font-size: 12px; }
 
+.tokenStudio{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.tokenCard{
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: var(--radius2);
+  padding: 18px;
+}
+
+.tokenCard__label{
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.tokenCard__value{
+  margin: 0;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(0,0,0,.25);
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+[data-theme="light"] .tokenCard__value{
+  background: rgba(0,0,0,.04);
+}
+
+.tokenCard__actions{
+  margin-top: 12px;
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tokenFile{
+  min-height: 180px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
 .link{
   color: var(--text);
   text-decoration: underline;
