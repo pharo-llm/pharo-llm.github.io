@@ -340,6 +340,33 @@ pre, code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 
 .section--alt{ background: rgba(255,255,255,.02); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 [data-theme="light"] .section--alt{ background: rgba(0,0,0,.02); }
 
+
+.section--projects{
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.section--projects::before{
+  content: "";
+  position: absolute;
+  inset: -120px -80px;
+  background:
+    radial-gradient(520px 260px at 12% 35%, rgba(98,210,255,.20), transparent 68%),
+    radial-gradient(640px 280px at 72% 15%, rgba(124,92,255,.20), transparent 70%),
+    radial-gradient(580px 320px at 44% 100%, rgba(98,210,255,.10), transparent 72%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+[data-theme="light"] .section--projects::before{
+  background:
+    radial-gradient(520px 260px at 12% 35%, rgba(10,167,217,.12), transparent 68%),
+    radial-gradient(640px 280px at 72% 15%, rgba(91,61,255,.13), transparent 70%),
+    radial-gradient(580px 320px at 44% 100%, rgba(10,167,217,.08), transparent 72%);
+}
+
+
 .section__head{ margin-bottom: 18px; }
 .section__title{
   margin: 0 0 8px;

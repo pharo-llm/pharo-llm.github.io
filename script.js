@@ -79,14 +79,12 @@
     return false;
   };
 
-  // ===== TOKEN STUDIO MINIMAL =====
-
   const genBtn = document.getElementById("generateTokenBtn");
   const addBtn = document.getElementById("addTokenBtn");
   const tokenView = document.getElementById("generatedToken");
   const status = document.getElementById("tokenStatus");
 
-  let tokensFileHandle = null;
+  let tokens = [];
 
   // Generate UUID
   genBtn?.addEventListener("click", () => {
@@ -95,25 +93,8 @@
     status.textContent = "Token generated.";
   });
 
-  // Choose file once
-  async function getFileHandle() {
-    if (tokensFileHandle) return tokensFileHandle;
-
-    tokensFileHandle = await window.showSaveFilePicker({
-      suggestedName: "tokens.txt",
-      types: [
-        {
-          description: "Text file",
-          accept: { "text/plain": [".txt"] },
-        },
-      ],
-    });
-
-    return tokensFileHandle;
-  }
-
-  // Add token to file
-  addBtn?.addEventListener("click", async () => {
+  // Download tokens as file
+  addBtn?.addEventListener("click", () => {
     const token = tokenView.textContent.trim();
 
     if (!token || token === "—") {
@@ -121,19 +102,17 @@
       return;
     }
 
-    try {
-      const handle = await getFileHandle();
-      const file = await handle.getFile();
-      const oldText = await file.text();
+    tokens.push(token);
 
-      const writable = await handle.createWritable();
-      await writable.write(oldText + token + "\n");
-      await writable.close();
+    const blob = new Blob([tokens.join("\n")], { type: "text/plain" });
+    const a = document.createElement("a");
 
-      status.textContent = "Token added to file.";
-    } catch (err) {
-      status.textContent = "File write canceled or unsupported.";
-    }
+    a.href = URL.createObjectURL(blob);
+    a.download = "tokens.txt";
+    a.click();
+
+    status.textContent = "tokens.txt downloaded.";
   });
+
 
 })();
