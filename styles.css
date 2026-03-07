@@ -101,6 +101,11 @@ pre, code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 
   color: white;
   box-shadow: var(--shadow);
 }
+.brand__logo{
+  width: 20px;
+  height: 20px;
+  display: block;
+}
 .brand__text{ font-size: 16px; }
 .brand--footer .brand__mark{
   width: 30px; height: 30px; border-radius: 10px;
