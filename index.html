@@ -3,114 +3,104 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="LLM engineering on Pharo: agents, evaluation, RAG, and developer tools built for live programming." />
+  <meta
+    name="description"
+    content="LLM engineering on Pharo: agents, evaluation, RAG, and developer tools built for live programming."
+  />
   <title>Pharo-LLM</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-<header class="header" id="top" role="banner">
-  <div class="container header__inner">
-    
-    <!-- Brand -->
-    <a class="brand" href="#top" aria-label="Pharo-LLM home">
-      <span class="brand__mark" aria-hidden="true">
-        <img class="brand__logo" src="logo.png" alt="" />
-      </span>
-      <span class="brand__text">Pharo-LLM</span>
-    </a>
+  <header class="header" id="top" role="banner">
+    <div class="container header__inner">
+      <a class="brand" href="#top" aria-label="Pharo-LLM home">
+        <span class="brand__mark" aria-hidden="true">
+          <img class="brand__logo" src="logo.png" alt="" />
+        </span>
+        <span class="brand__text">Pharo-LLM</span>
+      </a>
 
-    <!-- Navigation -->
-    <nav class="nav" aria-label="Primary navigation">
-      
-      <!-- Mobile toggle -->
-      <button
-        class="nav__toggle"
-        type="button"
-        aria-expanded="false"
-        aria-controls="navMenu"
-        aria-label="Toggle menu"
-      >
-        <span class="nav__toggleLines" aria-hidden="true"></span>
-      </button>
-
-      <!-- Menu -->
-      <div class="nav__menu" id="navMenu" role="menu">
-
-          <!-- theme button -->
-        <button class="themeBtn themeBtn--small" id="themeBtn" type="button" aria-label="Toggle theme">
-          ☀️
+      <nav class="nav" aria-label="Primary navigation">
+        <button
+          class="nav__toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="navMenu"
+          aria-label="Toggle menu"
+        >
+          <span class="nav__toggleLines" aria-hidden="true"></span>
         </button>
-  
-        <!-- GitHub -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-        <a
-          class="nav__link nav__link--icon"
-          href="https://github.com/pharo-llm"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="GitHub profile (opens in new tab)"
-        >
-          <span class="fa-brands fa-github" aria-hidden="true"></span>
-        </a>
-        <!-- Hugging Face -->
-        <a
-          class="nav__link nav__link--icon"
-          href="https://huggingface.co/pharo-llm"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Hugging Face profile (opens in new tab)"
-          role="menuitem"
-        >
-          <span aria-hidden="true">🤗</span>
-        </a>
+        <div class="nav__menu" id="navMenu" role="menu">
+          <button class="themeBtn themeBtn--small" id="themeBtn" type="button" aria-label="Toggle theme">
+            ☀️
+          </button>
 
-        <!-- Discord -->
-        <a
-          class="nav__link nav__link--icon"
-          href="https://discord.gg/QewZMZa"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Discord server (opens in new tab)"
-          role="menuitem"
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
+          <a
+            class="nav__link nav__link--icon"
+            href="https://github.com/pharo-llm"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub profile (opens in new tab)"
           >
-            <title>Discord</title>
-            <path d="M20.317 4.369A19.791 19.791 0 0 0 16.558 3c-.161.287-.346.673-.474.976a18.27 18.27 0 0 0-8.168 0 9.587 9.587 0 0 0-.48-.976A19.736 19.736 0 0 0 3.674 4.37C1.343 7.847.708 11.24.96 14.583a19.9 19.9 0 0 0 5.99 3.055c.484-.665.915-1.37 1.286-2.111-.705-.265-1.378-.593-2.013-.976.168-.124.332-.252.49-.385 3.877 1.823 8.077 1.823 11.908 0 .16.133.324.261.492.385-.635.383-1.31.711-2.015.976.372.741.803 1.446 1.287 2.111a19.86 19.86 0 0 0 5.99-3.055c.294-3.876-.635-7.24-2.058-10.214zM8.02 12.278c-1.182 0-2.15-1.085-2.15-2.419 0-1.333.95-2.418 2.15-2.418 1.208 0 2.177 1.094 2.15 2.418 0 1.334-.95 2.419-2.15 2.419zm7.96 0c-1.182 0-2.15-1.085-2.15-2.419 0-1.333.95-2.418 2.15-2.418 1.208 0 2.177 1.094 2.15 2.418 0 1.334-.941 2.419-2.15 2.419z"/>
-          </svg>
-        </a>
+            <span class="fa-brands fa-github" aria-hidden="true"></span>
+          </a>
 
+          <a
+            class="nav__link nav__link--icon"
+            href="https://huggingface.co/pharo-llm"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Hugging Face profile (opens in new tab)"
+            role="menuitem"
+          >
+            <span class="icon-emoji" aria-hidden="true">🤗</span>
+          </a>
 
-      </div>
-    </nav>
-  </div>
-</header>
+          <a
+            class="nav__link nav__link--icon"
+            href="https://discord.gg/QewZMZa"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Discord server (opens in new tab)"
+            role="menuitem"
+          >
+            <svg
+              class="nav__iconSvg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <title>Discord</title>
+              <path d="M20.317 4.369A19.791 19.791 0 0 0 16.558 3c-.161.287-.346.673-.474.976a18.27 18.27 0 0 0-8.168 0 9.587 9.587 0 0 0-.48-.976A19.736 19.736 0 0 0 3.674 4.37C1.343 7.847.708 11.24.96 14.583a19.9 19.9 0 0 0 5.99 3.055c.484-.665.915-1.37 1.286-2.111-.705-.265-1.378-.593-2.013-.976.168-.124.332-.252.49-.385 3.877 1.823 8.077 1.823 11.908 0 .16.133.324.261.492.385-.635.383-1.31.711-2.015.976.372.741.803 1.446 1.287 2.111a19.86 19.86 0 0 0 5.99-3.055c.294-3.876-.635-7.24-2.058-10.214zM8.02 12.278c-1.182 0-2.15-1.085-2.15-2.419 0-1.333.95-2.418 2.15-2.418 1.208 0 2.177 1.094 2.15 2.418 0 1.334-.95 2.419-2.15 2.419zm7.96 0c-1.182 0-2.15-1.085-2.15-2.419 0-1.333.95-2.418 2.15-2.418 1.208 0 2.177 1.094 2.15 2.418 0 1.334-.941 2.419-2.15 2.419z"/>
+            </svg>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
 
   <main id="main">
-
-    <!-- HERO / INTRO -->
     <section class="hero">
       <div class="container">
-        <!-- <span class="pill">
-          <span class="pill__dot"></span>
-          LLMs in Pharo
-        </span> -->
-
         <h1 class="hero__title">
           Pharo-LLM brings
           <span class="hero__titleAccent">Large Language Models</span>
@@ -123,17 +113,29 @@
         </p>
 
         <div class="hero__actions">
-          <a class="btn btn--primary" href="https://github.com/pharo-llm">
-             <span class="fa-brands fa-github" aria-hidden="true"></span>
+          <a
+            class="btn btn--icon"
+            href="https://github.com/pharo-llm"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <span class="fa-brands fa-github" aria-hidden="true"></span>
           </a>
 
-          <a class="btn" href="https://huggingface.co/pharo-llm">
-            <span aria-hidden="true">🤗</span>
+          <a
+            class="btn btn--icon"
+            href="https://huggingface.co/pharo-llm"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Hugging Face"
+          >
+            <span class="icon-emoji" aria-hidden="true">🤗</span>
           </a>
         </div>
       </div>
     </section>
-    <!-- HIGHLIGHTS -->
+
     <section class="section section--projects" id="highlights">
       <div class="container">
         <div class="section__head">
@@ -144,7 +146,6 @@
         </div>
 
         <div class="grid3">
-          <!-- ChatPharo -->
           <article class="card">
             <h3 class="card__title">ChatPharo</h3>
             <p class="card__text">
@@ -155,7 +156,6 @@
             </a>
           </article>
 
-          <!-- Pharo-Copilot -->
           <article class="card">
             <h3 class="card__title">Pharo-Copilot</h3>
             <p class="card__text">
@@ -166,7 +166,6 @@
             </a>
           </article>
 
-          <!-- PharoInfer -->
           <article class="card">
             <h3 class="card__title">PharoInfer</h3>
             <p class="card__text">
@@ -177,7 +176,6 @@
             </a>
           </article>
 
-          <!-- Etc card -->
           <article class="card">
             <h3 class="card__title">More projects…</h3>
             <p class="card__text">
@@ -191,56 +189,54 @@
       </div>
     </section>
 
-  <section class="section section--alt" id="token-studio">
-    <div class="container">
-      <div class="section__head">
-        <h2 class="section__title">Token Studio</h2>
-        <p class="section__subtitle">
-          Generate a UUID token and add it to your token file.
-        </p>
+    <section class="section section--alt" id="token-studio">
+      <div class="container">
+        <div class="section__head">
+          <h2 class="section__title">Token Studio</h2>
+          <p class="section__subtitle">
+            Generate a UUID token and add it to your token file.
+          </p>
+        </div>
+
+        <div class="tokenStudio">
+          <article class="tokenCard">
+            <p class="tokenCard__label">Generated token</p>
+
+            <pre class="tokenCard__value" id="generatedToken">—</pre>
+
+            <div class="tokenCard__actions">
+              <button class="btn btn--primary" id="generateTokenBtn">
+                Generate token
+              </button>
+
+              <button class="btn" id="addTokenBtn">
+                Add token to file
+              </button>
+            </div>
+
+            <p id="tokenStatus"></p>
+          </article>
+        </div>
       </div>
-
-      <div class="tokenStudio">
-        <article class="tokenCard">
-          <p class="tokenCard__label">Generated token</p>
-
-          <pre class="tokenCard__value" id="generatedToken">—</pre>
-
-          <div class="tokenCard__actions">
-            <button class="btn btn--primary" id="generateTokenBtn">
-              Generate token
-            </button>
-
-            <button class="btn" id="addTokenBtn">
-              Add token to file
-            </button>
-          </div>
-
-          <p id="tokenStatus"></p>
-        </article>
-      </div>
-    </div>
-  </section>
-
     </section>
 
-    <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container footer__inner">
-      <div class="footer__left">
-        <div class="brand brand--footer">
-             <span class="brand__mark" aria-hidden="true">
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div class="footer__left">
+          <div class="brand brand--footer">
+            <span class="brand__mark" aria-hidden="true">
               <img class="brand__logo" src="logo.png" alt="" />
             </span>
-          <span class="brand__text">Pharo-LLM</span>
+            <span class="brand__text">Pharo-LLM</span>
+          </div>
+
+          <p class="footer__small">
+            <span id="year"></span> Pharo-LLM •
+            <a href="LICENSE" target="_blank">MIT License</a>
+          </p>
         </div>
-        <p class="footer__small">
-          <span id="year"></span> Pharo-LLM •
-          <a href="LICENSE" target="_blank">MIT License</a>
-        </p>
       </div>
-    </div>
-  </footer>
+    </footer>
   </main>
 
   <script src="script.js"></script>
