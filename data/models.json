@@ -1,0 +1,282 @@
+{
+  "updated": "2026-11-23",
+  "default_model": "pharo-coder-1.0-mini",
+  "models": [
+    {
+      "id": "pharo-coder-1.0-nano",
+      "display": "Pharo-Coder 1.0 Nano",
+      "family": "Pharo-Coder",
+      "version": "1.0",
+      "tier": "nano",
+      "size": "1.5B",
+      "status": "planned",
+      "release_date": null,
+      "snapshots": [],
+      "description": "Fastest and smallest. Runs on any laptop; ideal for completion and simple tasks.",
+      "base_model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "context_window": 32768,
+      "max_output": 8192,
+      "ratings": {
+        "intelligence": null,
+        "speed": 5
+      },
+      "benchmarks": {
+        "pharoeval": {},
+        "baselines": {}
+      },
+      "links": {
+        "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Nano-1.5B-Instruct",
+        "hf_base": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Nano-1.5B-Base",
+        "hf_gguf": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Nano-1.5B-Instruct-GGUF",
+        "ollama": "https://ollama.com/pharo-llm/pharo-coder"
+      },
+      "ollama_tags": [
+        "1.0-nano-q4_k_m",
+        "1.0-nano",
+        "nano",
+        "1.5b"
+      ],
+      "quantizations": [
+        {
+          "name": "Q4_K_M",
+          "size_gb": null,
+          "default": true
+        },
+        {
+          "name": "Q5_K_M",
+          "size_gb": null,
+          "default": false
+        },
+        {
+          "name": "Q8_0",
+          "size_gb": null,
+          "default": false
+        }
+      ],
+      "license": "apache-2.0"
+    },
+    {
+      "id": "pharo-coder-1.0-mini",
+      "display": "Pharo-Coder 1.0 Mini",
+      "family": "Pharo-Coder",
+      "version": "1.0",
+      "tier": "mini",
+      "size": "7B",
+      "status": "planned",
+      "release_date": null,
+      "snapshots": [],
+      "description": "Best balance of quality and speed. Recommended default for local Pharo development.",
+      "base_model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+      "context_window": 32768,
+      "max_output": 8192,
+      "ratings": {
+        "intelligence": null,
+        "speed": 4
+      },
+      "benchmarks": {
+        "pharoeval": {},
+        "baselines": {}
+      },
+      "links": {
+        "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct",
+        "hf_base": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Mini-7B-Base",
+        "hf_gguf": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct-GGUF",
+        "ollama": "https://ollama.com/pharo-llm/pharo-coder"
+      },
+      "ollama_tags": [
+        "1.0-mini-q4_k_m",
+        "1.0-mini",
+        "mini",
+        "7b"
+      ],
+      "quantizations": [
+        {
+          "name": "Q4_K_M",
+          "size_gb": null,
+          "default": true
+        },
+        {
+          "name": "Q5_K_M",
+          "size_gb": null,
+          "default": false
+        },
+        {
+          "name": "Q8_0",
+          "size_gb": null,
+          "default": false
+        }
+      ],
+      "license": "apache-2.0"
+    },
+    {
+      "id": "pharo-coder-1.0",
+      "display": "Pharo-Coder 1.0",
+      "family": "Pharo-Coder",
+      "version": "1.0",
+      "tier": "flagship",
+      "size": "14B",
+      "status": "planned",
+      "release_date": null,
+      "snapshots": [],
+      "description": "Our most capable model for everyday Pharo development.",
+      "base_model": "Qwen/Qwen2.5-Coder-14B-Instruct",
+      "context_window": 32768,
+      "max_output": 8192,
+      "ratings": {
+        "intelligence": null,
+        "speed": 3
+      },
+      "benchmarks": {
+        "pharoeval": {},
+        "baselines": {}
+      },
+      "links": {
+        "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-14B-Instruct",
+        "hf_base": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-14B-Base",
+        "hf_gguf": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-14B-Instruct-GGUF",
+        "ollama": "https://ollama.com/pharo-llm/pharo-coder"
+      },
+      "ollama_tags": [
+        "1.0-q4_k_m",
+        "1.0",
+        "latest",
+        "14b"
+      ],
+      "quantizations": [
+        {
+          "name": "Q4_K_M",
+          "size_gb": null,
+          "default": true
+        },
+        {
+          "name": "Q5_K_M",
+          "size_gb": null,
+          "default": false
+        },
+        {
+          "name": "Q8_0",
+          "size_gb": null,
+          "default": false
+        }
+      ],
+      "license": "apache-2.0"
+    },
+    {
+      "id": "pharo-coder-1.0-max",
+      "display": "Pharo-Coder 1.0 Max",
+      "family": "Pharo-Coder",
+      "version": "1.0",
+      "tier": "max",
+      "size": "32B",
+      "status": "planned",
+      "release_date": null,
+      "snapshots": [],
+      "description": "Maximum quality for hard design, refactoring and debugging tasks.",
+      "base_model": "Qwen/Qwen2.5-Coder-32B-Instruct",
+      "context_window": 32768,
+      "max_output": 8192,
+      "ratings": {
+        "intelligence": null,
+        "speed": 2
+      },
+      "benchmarks": {
+        "pharoeval": {},
+        "baselines": {}
+      },
+      "links": {
+        "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Max-32B-Instruct",
+        "hf_base": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Max-32B-Base",
+        "hf_gguf": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Max-32B-Instruct-GGUF",
+        "ollama": "https://ollama.com/pharo-llm/pharo-coder"
+      },
+      "ollama_tags": [
+        "1.0-max-q4_k_m",
+        "1.0-max",
+        "max",
+        "32b"
+      ],
+      "quantizations": [
+        {
+          "name": "Q4_K_M",
+          "size_gb": null,
+          "default": true
+        },
+        {
+          "name": "Q5_K_M",
+          "size_gb": null,
+          "default": false
+        },
+        {
+          "name": "Q8_0",
+          "size_gb": null,
+          "default": false
+        }
+      ],
+      "license": "apache-2.0"
+    },
+    {
+      "id": "qwen2.5-coder-sft-3b",
+      "display": "Qwen2.5-Coder-SFT 3B (legacy)",
+      "family": "Legacy",
+      "version": "0",
+      "tier": "legacy",
+      "size": "3B",
+      "status": "deprecated",
+      "release_date": null,
+      "snapshots": [],
+      "description": "Our first experimental Pharo fine-tune. Superseded by Pharo-Coder 1.0.",
+      "base_model": "Qwen/Qwen2.5-Coder-3B-Instruct",
+      "context_window": 32768,
+      "max_output": 8192,
+      "ratings": {
+        "intelligence": 1,
+        "speed": 4
+      },
+      "benchmarks": {
+        "pharoeval": {
+          "n": 66,
+          "pass@1": 1.52,
+          "compile_rate": 16.67,
+          "test_pass_rate": 5.68,
+          "by_category": {
+            "advanced": 0.0,
+            "algorithms": 0.0,
+            "basics": 0.0,
+            "blocks": 0.0,
+            "bugfix": 20.0,
+            "collections": 0.0,
+            "exceptions": 0.0,
+            "idioms": 0.0,
+            "oop": 0.0,
+            "reflection": 0.0,
+            "streams": 0.0,
+            "strings": 0.0,
+            "testing": 0.0,
+            "translate": 0.0
+          },
+          "by_difficulty": {
+            "easy": 0.0,
+            "hard": 0.0,
+            "medium": 3.45
+          },
+          "note": "Measured on PharoEval v1 with the q4_K_M GGUF via Ollama"
+        },
+        "baselines": {}
+      },
+      "links": {
+        "ollama": "https://ollama.com/pharo-llm/Qwen2.5-Coder-SFT"
+      },
+      "ollama_tags": [
+        "3b-q4_K_M"
+      ],
+      "quantizations": [
+        {
+          "name": "Q4_K_M",
+          "size_gb": 1.9,
+          "default": true
+        }
+      ],
+      "license": "apache-2.0"
+    }
+  ]
+}

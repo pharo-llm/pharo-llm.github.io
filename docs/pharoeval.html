@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+
+  <title>PharoEval benchmark — Pharo-LLM Docs</title>
+</head>
+<body data-page="docs">
+  <div class="docs">
+    <aside class="docs__side" aria-label="Documentation"></aside>
+    <main id="main" class="docs__main prose">
+
+<div class="eyebrow">Research</div>
+<h1>PharoEval</h1>
+<p class="muted" style="font-size:17px">An execution-based benchmark for Pharo code generation.</p>
+<h2>What it measures</h2>
+<p>PharoEval v1 has 66 hand-written problems in 14 categories: basics, strings, collections, algorithms, object-oriented design, blocks, exceptions, streams, idioms, bug fixing, translation from Python/Java, reflection, SUnit test writing, and advanced data structures (30 easy, 29 medium, 7 hard).</p>
+<h2>How a solution is scored</h2>
+<ol>
+<li>The answer's code blocks are parsed (fluid, legacy and Tonel class definitions and methods are all accepted).</li>
+<li>A <strong>fresh headless Pharo image</strong> is started; classes are created and methods compiled. Undeclared variables or syntax errors fail the problem. Redefining existing system classes is refused.</li>
+<li>Each test is a Pharo expression that must evaluate to <code>true</code>, with a timeout. The problem counts as solved only if <strong>all</strong> tests pass.</li>
+</ol>
+<p>We report <strong>pass@1</strong> with greedy decoding, the compile rate, and the fraction of individual tests passed.</p>
+<h2>Quality controls</h2>
+<ul>
+<li>Every reference solution is verified to pass in Pharo.</li>
+<li>Every problem is verified to <em>fail</em> with an empty answer. Error tests check that the error is not just <code>MessageNotUnderstood</code>, and no selector already exists in the image.</li>
+<li>All training data is decontaminated against PharoEval (exact prompt match and 13-gram overlap with the reference solutions).</li>
+</ul>
+<h2>Results</h2>
+<div data-eval-table></div>
+<h2>Example problem</h2>
+<pre data-lang="text" data-label="pharoeval.yaml">- id: oop/bounded-stack
+  prompt: Implement a class `LimitedStack` with class-side constructor `new: capacity`, and instance
+          methods `push:` (answers the pushed object, signals an Error when full), `pop` ...
+  tests:
+    - &quot;| s | s := LimitedStack new: 2. s push: 1; push: 2. s pop = 2 and: [s size = 1]&quot;
+    - &quot;[(LimitedStack new: 3) pop. false] on: Error do: [:e | (e isKindOf: MessageNotUnderstood) not]&quot;</pre>
+<h2>Run it yourself</h2>
+<pre data-lang="bash">pip install -e &quot;git+https://github.com/pharo-llm/pharo-one#egg=pharo-one&quot;
+pharo-one eval --config configs/pharo-coder-1.0-mini.yaml --name &quot;my model&quot; \
+  --openai-model pharo-llm/pharo-coder:mini --base-url http://localhost:11434/v1</pre>
+
+    </main>
+    <nav class="docs__toc" aria-label="On this page"></nav>
+  </div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

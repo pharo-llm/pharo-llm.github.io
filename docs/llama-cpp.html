@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+
+  <title>llama.cpp & GGUF — Pharo-LLM Docs</title>
+</head>
+<body data-page="docs">
+  <div class="docs">
+    <aside class="docs__side" aria-label="Documentation"></aside>
+    <main id="main" class="docs__main prose">
+
+<div class="eyebrow">Use the models</div>
+<h1>llama.cpp &amp; GGUF</h1>
+<p class="muted" style="font-size:17px">Quantized builds for CPUs, Apple Silicon and small GPUs.</p>
+<h2>Files</h2>
+<div class="table-wrap"><table><thead><tr><th>Quantization</th><th>Quality</th><th>Use when</th></tr></thead><tbody>
+<tr><td><code>Q4_K_M</code></td><td>Good (default)</td><td>Most machines</td></tr>
+<tr><td><code>Q5_K_M</code></td><td>Better</td><td>A little more memory available</td></tr>
+<tr><td><code>Q8_0</code></td><td>Near-lossless</td><td>Plenty of memory</td></tr>
+</tbody></table></div>
+<p>The default quantization of every release is re-evaluated on PharoEval through Ollama before it is published; a release is blocked if it loses more than 5 points against bf16.</p>
+<h2>Run with llama.cpp</h2>
+<pre data-lang="bash"># download + run directly from Hugging Face
+llama-cli -hf pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct-GGUF:Q4_K_M -cnv
+
+# or serve an OpenAI-compatible API
+llama-server -hf pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct-GGUF:Q4_K_M --ctx-size 16384 --port 8080</pre>
+<h2>Use a GGUF file with Ollama</h2>
+<pre data-lang="text" data-label="Modelfile">FROM ./Pharo-Coder-1.0-Mini-7B-Instruct-Q4_K_M.gguf
+TEMPLATE &quot;&quot;&quot;{{{{- if .System }}}}&lt;|im_start|&gt;system
+{{{{ .System }}}}&lt;|im_end|&gt;
+{{{{ end }}}}{{{{- range .Messages }}}}&lt;|im_start|&gt;{{{{ .Role }}}}
+{{{{ .Content }}}}&lt;|im_end|&gt;
+{{{{ end }}}}&lt;|im_start|&gt;assistant
+&quot;&quot;&quot;
+PARAMETER stop &lt;|im_end|&gt;
+PARAMETER temperature 0.2</pre>
+<div class="callout"><strong>Always set the chat template</strong>A GGUF imported without its ChatML <code>TEMPLATE</code> will not follow instructions (it tends to echo the prompt). The official Ollama builds include it.</div>
+
+    </main>
+    <nav class="docs__toc" aria-label="On this page"></nav>
+  </div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

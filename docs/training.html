@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+
+  <title>Training pipeline — Pharo-LLM Docs</title>
+</head>
+<body data-page="docs">
+  <div class="docs">
+    <aside class="docs__side" aria-label="Documentation"></aside>
+    <main id="main" class="docs__main prose">
+
+<div class="eyebrow">Research</div>
+<h1>Training pipeline</h1>
+<p class="muted" style="font-size:17px">Every Pharo-Coder release is produced by one automated, resumable pipeline: <code>pharo-one</code>.</p>
+<pre data-lang="bash">pharo-one run --config configs/pharo-coder-1.0-mini.yaml</pre>
+<h2>Stages</h2>
+<div class="table-wrap"><table><thead><tr><th>#</th><th>Stage</th><th>What it does</th></tr></thead><tbody>
+<tr><td>1</td><td><code>setup</code></td><td>Downloads a clean Pharo image + VM and validates PharoEval itself.</td></tr>
+<tr><td>2</td><td><code>mine</code></td><td>Dumps every class of the (MIT) Pharo image; searches GitHub month by month, keeps permissive licenses, shallow-clones, parses Tonel, FileTree and chunk files.</td></tr>
+<tr><td>3</td><td><code>corpus</code></td><td>Quality filters, exact + MinHash dedup, real-parser syntax validation, decontamination; renders each class as a Tonel file.</td></tr>
+<tr><td>4</td><td><code>sft_data</code></td><td>Tasks from real code + teacher-synthesized exercises with tests, rejection-sampled and verified in Pharo, repair rounds, mixing.</td></tr>
+<tr><td>5</td><td><code>cpt</code></td><td>Continued pre-training of the base model on the Pharo corpus (+ general-code replay).</td></tr>
+<tr><td>6</td><td><code>chat_vector</code></td><td>Adds (Instruct − Base) to restore instruction following.</td></tr>
+<tr><td>7</td><td><code>sft</code></td><td>Supervised fine-tuning, loss on assistant turns only.</td></tr>
+<tr><td>8</td><td><code>eval</code></td><td>PharoEval for the new model, the base instruct model, ablations and previous releases.</td></tr>
+<tr><td>9</td><td><code>gate</code></td><td>Stops the release unless it beats the base model by a configured margin.</td></tr>
+<tr><td>10</td><td><code>export</code></td><td>GGUF conversion and quantization, Ollama models, and re-evaluation of the GGUF through Ollama.</td></tr>
+<tr><td>11</td><td><code>publish</code></td><td>Model cards, Hugging Face uploads (safetensors, base, GGUF), Ollama push.</td></tr>
+<tr><td>12</td><td><code>site</code>, <code>report</code></td><td>Updates this website's model catalog and generates the technical report from the run's real numbers.</td></tr>
+</tbody></table></div>
+<h2>Verified SFT data</h2>
+<p>A teacher answers each synthesized exercise several times. An answer is kept only if, in a fresh image, all classes and methods compile, every sent selector has at least one implementor in the image (catching invented APIs), all tests pass, and the usage examples run. Failing answers get the real Pharo errors back for repair; successful repairs also become multi-turn debugging conversations.</p>
+
+    </main>
+    <nav class="docs__toc" aria-label="On this page"></nav>
+  </div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

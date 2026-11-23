@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+  <title>Models — Pharo-LLM</title>
+</head>
+<body data-page="models">
+  <main id="main" class="container page">
+    <div class="page-head">
+      <div class="eyebrow">Models</div>
+      <h1>Models</h1>
+      <p>Pharo-Coder comes in four tiers. Pick the one that fits your hardware and task, or <a class="link" href="/compare.html">compare models</a> side by side.</p>
+    </div>
+    <div class="chips" id="filters" style="margin-bottom:20px"></div>
+    <div class="grid grid-3" id="catalog"></div>
+
+    <h2>All model IDs and snapshots</h2>
+    <p class="muted">Use the alias to always get the latest snapshot, or pin a dated snapshot for reproducible results. <a class="link" href="/docs/models.html">How models are named</a>.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Model ID</th><th>Status</th><th>Size</th><th class="num">Context</th><th class="num">PharoEval</th><th>Snapshots</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+  </main>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

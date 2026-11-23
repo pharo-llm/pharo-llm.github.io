@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+
+  <title>Technical report — Pharo-LLM Docs</title>
+</head>
+<body data-page="research">
+  <div class="docs">
+    <aside class="docs__side" aria-label="Documentation"></aside>
+    <main id="main" class="docs__main prose">
+
+<div class="eyebrow">Research · Technical report</div>
+<h1>Pharo-Coder 1.0 Technical Report</h1>
+<p class="muted">Pharo-LLM team · Version 1.0</p>
+<div class="callout callout--accent"><strong>Living document</strong>Tables marked as generated are filled from the released models' data. Each release also ships a full report with that run's exact numbers in <a href="https://github.com/pharo-llm/pharo-llm.github.io/tree/main/reports">/reports</a>.</div>
+
+<h2>Abstract</h2>
+<p>We present <strong>Pharo-Coder 1.0</strong>, a family of open code models (1.5B, 7B, 14B and 32B parameters) specialised for the Pharo Smalltalk language and environment. Starting from Qwen2.5-Coder, we continue pre-training on a deduplicated, syntax-validated corpus of permissively licensed Pharo code; restore instruction following with a chat-vector merge; and fine-tune on conversations whose every code answer was <strong>executed and verified inside a real Pharo image</strong>. We introduce <strong>PharoEval</strong>, an execution-based benchmark of 66 Pharo programming problems, and gate every release on beating its base model there.</p>
+
+<h2>1. Introduction</h2>
+<p>Smalltalk is a rounding error in the corpora of general code models. As a result they mix Pharo with Squeak and GNU Smalltalk, use the class-definition message removed in recent Pharo versions, invent selectors, and seldom produce code that installs and runs. Pharo-Coder addresses these failure modes with three ideas:</p>
+<ol>
+<li><strong>Pharo-native data:</strong> the complete Pharo image plus the open-source Pharo ecosystem on GitHub, rendered in the Tonel format developers actually use.</li>
+<li><strong>Verification by execution:</strong> every synthesized training answer is compiled and tested in a fresh Pharo image; failures are repaired using real error messages or discarded.</li>
+<li><strong>Honest evaluation:</strong> an execution-based benchmark and a release gate.</li>
+</ol>
+
+<h2>2. Model family</h2>
+<div data-models-table></div>
+<p>All models keep the architecture and tokenizer of their base (decoder-only Transformer with grouped-query attention, RoPE, SwiGLU and RMSNorm), with a 32K-token context window.</p>
+
+<h2>3. Pre-training data</h2>
+<h3>3.1 Sources</h3>
+<ul>
+<li><strong>The Pharo image</strong> (MIT). A Pharo 14 image alone contains 11,533 classes and traits and 133,700 methods. After filtering and deduplication it contributes about 120K unique methods (≈12M tokens).</li>
+<li><strong>GitHub.</strong> Repositories are found by searching month by month since 2008 (to get past the API's 1,000-result cap), restricted to permissive licenses (MIT, Apache-2.0, BSD, ISC, MPL-2.0, CC0, CC-BY(-SA), EPL-2.0, …) and shallow-cloned. Tonel, FileTree and chunk-format files are parsed; README and book sources become the text part of the corpus.</li>
+</ul>
+<h3>3.2 Processing</h3>
+<ol>
+<li>Line-ending normalisation (Pharo stores sources with CR line ends).</li>
+<li>Quality filters: length limits, minified or data-blob methods, generated code.</li>
+<li>Exact method-level deduplication, then <strong>syntax validation with Pharo's own parser</strong> (<code>RBParser</code>).</li>
+<li>Exact and near-duplicate removal at file level (MinHash, 5-token shingles, 64 permutations, LSH with 16 bands, Jaccard ≥ 0.85).</li>
+<li>Decontamination: any document sharing a 13-token n-gram with a PharoEval reference solution is removed.</li>
+<li>Each class becomes one document in Tonel format: class comment, class definition, then methods with their protocols.</li>
+</ol>
+
+<h2>4. Continued pre-training</h2>
+<p>We continue training the <em>base</em> checkpoint (not the instruct one) on the Pharo corpus, packed into 8,192-token sequences, with a cosine learning-rate schedule (peak 2·10⁻⁵ for 7B, lower for larger models) for two epochs. A replay slice of general code equal to 20% of the Pharo volume limits catastrophic forgetting. Training uses DeepSpeed ZeRO-3 in bf16.</p>
+
+<h2>5. Post-training</h2>
+<h3>5.1 Chat vector</h3>
+<p>Instead of redoing the base lab's instruction tuning, we add the parameter difference between the official instruct and base checkpoints to the CPT model: θ = θ<sub>CPT</sub> + α(θ<sub>instruct</sub> − θ<sub>base</sub>), with α = 1. This recovers chat ability and general instruction following, which SFT then specialises.</p>
+<h3>5.2 Execution-verified SFT data</h3>
+<ol>
+<li><strong>Task synthesis.</strong> A strong teacher writes exercises over 60 Pharo topics (collections, streams, exceptions, class design, patterns, SUnit, Announcements, FileSystem memory, STON, processes, …) and six task kinds (implement, extend kernel classes, bug-fix, translate, write tests, refactor). 30% are grounded in a real class from the corpus. Each task comes with 4–8 executable tests.</li>
+<li><strong>Vetting.</strong> Tests that pass with an empty solution are removed; tasks with fewer than three remaining tests are dropped.</li>
+<li><strong>Rejection sampling.</strong> The teacher answers each task four times, following a strict style guide (plan, complete code in canonical format, explanation, Playground example). Each answer runs in a fresh image in <em>strict</em> mode: all classes and methods compile; every selector sent by the new methods has an implementor in the image (rejecting hallucinated APIs that would compile but never work); all tests pass; the usage example runs without error. The most concise passing answer is kept.</li>
+<li><strong>Repair.</strong> Failing tasks get the real Pharo errors back for up to two rounds. Successful repairs also become multi-turn "here is my error" conversations, trained on the final turn only.</li>
+<li><strong>Grounded explanations</strong> of real methods, whose code blocks must compile.</li>
+<li><strong>Real-code tasks</strong>: methods whose leading comment specifies them become "implement this method in this class" tasks; class comments become documentation tasks.</li>
+</ol>
+<h3>5.3 Mixture and training</h3>
+<p>Verified teacher data is upsampled 2×, explanations 1×, real-code tasks 0.5×, and 15% general code-instruction data is mixed in to preserve general ability. The student is trained with a short system prompt (not the teacher's style guide), so it internalises the style. Loss is computed on assistant tokens only, including the end-of-turn token; over-long samples are dropped, never truncated.</p>
+
+<h2>6. Evaluation</h2>
+<h3>6.1 PharoEval</h3>
+<p>66 problems across 14 categories, each with executable tests. A problem is solved only if the answer installs in a fresh image and all tests pass. References are verified to pass and empty answers to fail. See <a href="/docs/pharoeval.html">PharoEval</a>.</p>
+<h3>6.2 Results (generated)</h3>
+<div data-eval-table></div>
+<h3>6.3 Release gate</h3>
+<p>A model is exported and published only if (a) its PharoEval pass@1 exceeds a tier-specific minimum and (b) it beats its own base instruct model by at least 5 points. The default quantized GGUF is then re-evaluated <em>through Ollama</em>, testing the exact artifact users download, and the release is blocked if it loses more than 5 points.</p>
+
+<h2>7. Limitations</h2>
+<ul>
+<li>PharoEval measures self-contained tasks, not GUI work (Spec), visualisation (Roassal), web (Seaside) or large-codebase navigation.</li>
+<li>Selector checks catch invented messages, but not every wrong use of real ones. Run the code and its tests.</li>
+<li>The models target Pharo 12 and later (fluid class definitions); older images need the legacy syntax.</li>
+</ul>
+
+<h2>8. Conclusion</h2>
+<p>Verification by execution turns a small language's scarce data into reliable supervision. Because the entire pipeline is automated, from mining to publication, Pharo-Coder can be refreshed as the ecosystem evolves, and each snapshot is measured the same way.</p>
+
+<h2>Citation</h2>
+<pre data-lang="text" data-label="bibtex">@techreport{pharocoder2026,
+  title       = {Pharo-Coder 1.0 Technical Report},
+  author      = {{Pharo-LLM Team}},
+  institution = {Pharo-LLM},
+  year        = {2026},
+  url         = {https://pharo-llm.github.io/docs/technical-report.html}
+}</pre>
+
+    </main>
+    <nav class="docs__toc" aria-label="On this page"></nav>
+  </div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

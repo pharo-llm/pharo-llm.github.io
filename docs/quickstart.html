@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+
+  <title>Quickstart — Pharo-LLM Docs</title>
+</head>
+<body data-page="docs">
+  <div class="docs">
+    <aside class="docs__side" aria-label="Documentation"></aside>
+    <main id="main" class="docs__main prose">
+
+<div class="eyebrow">Get started</div>
+<h1>Quickstart</h1>
+<p class="muted" style="font-size:17px">Run Pharo-Coder locally and generate your first Pharo class.</p>
+<h2>1. Install Ollama</h2>
+<p>Download Ollama from <a href="https://ollama.com/download">ollama.com/download</a> (macOS, Linux, Windows). On Linux:</p>
+<pre data-lang="bash">curl -fsSL https://ollama.com/install.sh | sh</pre>
+<h2>2. Run a model</h2>
+<p><strong>Pharo-Coder Mini</strong> (7B) is the recommended default: it needs about 5 GB of memory with the default 4-bit quantization.</p>
+<div data-quickstart></div>
+<div class="callout"><strong>Which model should I use?</strong>Nano for laptops and completion, Mini for daily work, the flagship (14B) or Max (32B) when you have a GPU with 16–24 GB or more. See <a href="/docs/models.html">Models</a>.</div>
+<h2>3. Ask for Pharo code</h2>
+<p>Be specific about class names, selectors and behaviour. For example:</p>
+<pre data-lang="bash">ollama run pharo-llm/pharo-coder:mini &#x27;Create a class LimitedStack with new: capacity, push:, pop, top, isEmpty and isFull. push: on a full stack must signal an Error.&#x27;</pre>
+<p>The model answers with complete code in one <code>smalltalk</code> block: class definitions first (fluid syntax), then each method as <code>ClassName &gt;&gt; selector</code>, then a short explanation and a Playground example.</p>
+<h2>4. Load the code in Pharo</h2>
+<p>Paste the class definition into a System Browser to create the class, then each method into the class's method pane. Or ask the model for a Tonel file and load it with Iceberg.</p>
+<h2>Next steps</h2>
+<ul><li><a href="/docs/prompting.html">Prompting guide</a> — get better answers.</li><li><a href="/docs/pharo.html">Inside Pharo</a> — call the model from Pharo code.</li><li><a href="/docs/transformers.html">Transformers & vLLM</a> — serve on GPUs.</li></ul>
+
+    </main>
+    <nav class="docs__toc" aria-label="On this page"></nav>
+  </div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

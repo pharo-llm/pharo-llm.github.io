@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+
+  <title>Inside Pharo — Pharo-LLM Docs</title>
+</head>
+<body data-page="docs">
+  <div class="docs">
+    <aside class="docs__side" aria-label="Documentation"></aside>
+    <main id="main" class="docs__main prose">
+
+<div class="eyebrow">Use the models</div>
+<h1>Inside Pharo</h1>
+<p class="muted" style="font-size:17px">Call Pharo-Coder from Pharo code through Ollama's HTTP API.</p>
+<h2>ChatPharo</h2>
+<p><a href="https://pharo-llm.github.io/chatpharo/">ChatPharo</a> brings a chat assistant into the Pharo IDE. Select the Ollama provider in its settings and enter a Pharo-Coder model name, e.g. <code>pharo-llm/pharo-coder:mini</code>.</p>
+<h2>Plain Zinc + STON</h2>
+<p>This works in a fresh Pharo image with nothing else installed (tested on Pharo 14):</p>
+<pre data-lang="smalltalk" data-label="Playground">| body response answer |
+body := STONJSON toString: (Dictionary new
+	at: &#x27;model&#x27; put: &#x27;pharo-llm/pharo-coder:mini&#x27;;
+	at: &#x27;stream&#x27; put: false;
+	at: &#x27;messages&#x27; put: { Dictionary new
+		at: &#x27;role&#x27; put: &#x27;user&#x27;;
+		at: &#x27;content&#x27; put: &#x27;Write Integer &gt;&gt; isPerfectNumber&#x27;;
+		yourself };
+	yourself).
+response := ZnClient new
+	url: &#x27;http://localhost:11434/api/chat&#x27;;
+	entity: (ZnEntity with: body type: ZnMimeType applicationJson);
+	timeout: 120;
+	post.
+answer := ((STONJSON fromString: response) at: &#x27;message&#x27;) at: &#x27;content&#x27;.
+answer inspect</pre>
+
+    </main>
+    <nav class="docs__toc" aria-label="On this page"></nav>
+  </div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

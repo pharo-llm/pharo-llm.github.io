@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+
+  <title>Ollama — Pharo-LLM Docs</title>
+</head>
+<body data-page="docs">
+  <div class="docs">
+    <aside class="docs__side" aria-label="Documentation"></aside>
+    <main id="main" class="docs__main prose">
+
+<div class="eyebrow">Use the models</div>
+<h1>Ollama</h1>
+<p class="muted" style="font-size:17px">The easiest way to run Pharo-Coder on your own machine.</p>
+<h2>Pull and run</h2>
+<pre data-lang="bash">ollama pull pharo-llm/pharo-coder:mini
+ollama run pharo-llm/pharo-coder:mini</pre>
+<h2>Tags</h2>
+<div class="table-wrap"><table><thead><tr><th>Tag</th><th>Model</th></tr></thead><tbody>
+<tr><td><code>:nano</code>, <code>:1.5b</code>, <code>:1.0-nano</code></td><td>Pharo-Coder 1.0 Nano, Q4_K_M</td></tr>
+<tr><td><code>:mini</code>, <code>:7b</code>, <code>:1.0-mini</code></td><td>Pharo-Coder 1.0 Mini, Q4_K_M</td></tr>
+<tr><td><code>:latest</code>, <code>:14b</code>, <code>:1.0</code></td><td>Pharo-Coder 1.0 (flagship), Q4_K_M</td></tr>
+<tr><td><code>:max</code>, <code>:32b</code>, <code>:1.0-max</code></td><td>Pharo-Coder 1.0 Max, Q4_K_M</td></tr>
+<tr><td><code>:1.0-mini-q5_k_m</code>, <code>:1.0-mini-q8_0</code>, …</td><td>Higher-precision quantizations</td></tr>
+</tbody></table></div>
+<h2>OpenAI-compatible API</h2>
+<p>Ollama exposes an OpenAI-compatible endpoint, so any OpenAI client works:</p>
+<pre data-lang="python">from openai import OpenAI
+
+client = OpenAI(base_url=&quot;http://localhost:11434/v1&quot;, api_key=&quot;ollama&quot;)
+r = client.chat.completions.create(
+    model=&quot;pharo-llm/pharo-coder:mini&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Write Integer &gt;&gt; isPerfectNumber&quot;}],
+    temperature=0.2,
+)
+print(r.choices[0].message.content)</pre>
+<h2>Recommended settings</h2>
+<p>The published models already include the chat template, the Pharo-Coder system prompt and these defaults: <code>temperature 0.2</code>, <code>top_p 0.95</code>, <code>num_ctx 8192</code>. Raise <code>num_ctx</code> (up to 32768) when you paste large classes:</p>
+<pre data-lang="bash">ollama run pharo-llm/pharo-coder:mini
+&gt;&gt;&gt; /set parameter num_ctx 16384</pre>
+
+    </main>
+    <nav class="docs__toc" aria-label="On this page"></nav>
+  </div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

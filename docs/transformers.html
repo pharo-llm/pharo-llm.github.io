@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+
+  <title>Transformers & vLLM — Pharo-LLM Docs</title>
+</head>
+<body data-page="docs">
+  <div class="docs">
+    <aside class="docs__side" aria-label="Documentation"></aside>
+    <main id="main" class="docs__main prose">
+
+<div class="eyebrow">Use the models</div>
+<h1>Transformers &amp; vLLM</h1>
+<p class="muted" style="font-size:17px">Use the safetensors weights on GPUs.</p>
+<h2>Transformers</h2>
+<pre data-lang="bash">pip install -U transformers accelerate torch</pre>
+<pre data-lang="python">from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model_id = &quot;pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct&quot;
+tok = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(model_id, dtype=&quot;auto&quot;, device_map=&quot;auto&quot;)
+
+messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Create a Pharo class SavingsAccount with deposit:, withdraw: and balance.&quot;}]
+inputs = tok.apply_chat_template(messages, add_generation_prompt=True, return_tensors=&quot;pt&quot;).to(model.device)
+out = model.generate(inputs, max_new_tokens=1024, do_sample=False)
+print(tok.decode(out[0][inputs.shape[1]:], skip_special_tokens=True))</pre>
+<p>The chat template inserts the Pharo-Coder system prompt automatically when you don't provide one.</p>
+<h2>vLLM (OpenAI-compatible server)</h2>
+<pre data-lang="bash">pip install vllm
+vllm serve pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct --max-model-len 32768</pre>
+<pre data-lang="bash">curl http://localhost:8000/v1/chat/completions -H &quot;Content-Type: application/json&quot; -d &#x27;{
+  &quot;model&quot;: &quot;pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct&quot;,
+  &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Write String &gt;&gt; isPalindromeIgnoringCase&quot;}]
+}&#x27;</pre>
+<h2>Fine-tuning further</h2>
+<p>The <code>-Base</code> checkpoints are the best starting point for your own instruction tuning; the <code>-Instruct</code> checkpoints for light domain adaptation (e.g. LoRA on your company's Pharo code).</p>
+
+    </main>
+    <nav class="docs__toc" aria-label="On this page"></nav>
+  </div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

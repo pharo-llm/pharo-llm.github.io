@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+
+  <title>Overview — Pharo-LLM Docs</title>
+</head>
+<body data-page="docs">
+  <div class="docs">
+    <aside class="docs__side" aria-label="Documentation"></aside>
+    <main id="main" class="docs__main prose">
+
+<div class="eyebrow">Documentation</div>
+<h1>Pharo-LLM documentation</h1>
+<p class="muted" style="font-size:17px">Learn how to run Pharo-Coder models, integrate them in your tools and in the Pharo IDE, and how they are trained and evaluated.</p>
+<div class="grid grid-2" style="margin:28px 0">
+  <a class="card" href="/docs/quickstart.html"><h3>Quickstart</h3><p>Run your first Pharo-Coder model in under five minutes.</p></a>
+  <a class="card" href="/docs/models.html"><h3>Models</h3><p>Tiers, sizes, naming, versions and snapshots.</p></a>
+  <a class="card" href="/docs/prompting.html"><h3>Prompting guide</h3><p>Get the best Pharo code out of the models.</p></a>
+  <a class="card" href="/docs/technical-report.html"><h3>Technical report</h3><p>Data, training recipe and evaluation in detail.</p></a>
+</div>
+<h2>What is Pharo-Coder?</h2>
+<p>Pharo-Coder is a family of open-weight code models specialised for <a href="https://pharo.org">Pharo</a>. They are built on the Qwen2.5-Coder family, continue pre-training on Pharo code, and are fine-tuned on conversations whose code was <strong>executed and verified in real Pharo images</strong>.</p>
+<ul>
+  <li><strong>Write</strong> classes, methods and extension methods in modern Pharo (fluid class definitions, idiomatic collection protocol).</li>
+  <li><strong>Fix</strong> bugs from code and error messages, <strong>explain</strong> unfamiliar code, <strong>write SUnit tests</strong>.</li>
+  <li><strong>Translate</strong> Python, Java or JavaScript to idiomatic Pharo.</li>
+</ul>
+<h2>Available models</h2>
+<div data-models-table></div>
+<h2>Ways to run</h2>
+<div class="table-wrap"><table><thead><tr><th>Runtime</th><th>Best for</th><th>Format</th></tr></thead><tbody>
+<tr><td><a href="/docs/ollama.html">Ollama</a></td><td>Local use on Mac, Linux, Windows; ChatPharo</td><td>GGUF</td></tr>
+<tr><td><a href="/docs/llama-cpp.html">llama.cpp</a></td><td>Embedded and CPU inference, custom servers</td><td>GGUF</td></tr>
+<tr><td><a href="/docs/transformers.html">Transformers / vLLM</a></td><td>GPU serving, research, fine-tuning</td><td>safetensors</td></tr>
+<tr><td><a href="/docs/pharo.html">Inside Pharo</a></td><td>Calling the model from Pharo code</td><td>HTTP API</td></tr>
+</tbody></table></div>
+
+    </main>
+    <nav class="docs__toc" aria-label="On this page"></nav>
+  </div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

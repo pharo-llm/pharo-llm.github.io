@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+
+  <title>Models — Pharo-LLM Docs</title>
+</head>
+<body data-page="docs">
+  <div class="docs">
+    <aside class="docs__side" aria-label="Documentation"></aside>
+    <main id="main" class="docs__main prose">
+
+<div class="eyebrow">Get started</div>
+<h1>Models</h1>
+<p class="muted" style="font-size:17px">How Pharo-Coder models are organised, named and versioned.</p>
+<h2>Tiers</h2>
+<div class="table-wrap"><table><thead><tr><th>Tier</th><th>Size</th><th>Base model</th><th>Use it for</th></tr></thead><tbody>
+<tr><td><strong>Nano</strong></td><td>1.5B</td><td>Qwen2.5-Coder-1.5B</td><td>Laptops, CI, code completion, simple tasks</td></tr>
+<tr><td><strong>Mini</strong></td><td>7B</td><td>Qwen2.5-Coder-7B</td><td>Everyday local development (recommended default)</td></tr>
+<tr><td><strong>Flagship</strong></td><td>14B</td><td>Qwen2.5-Coder-14B</td><td>Best everyday quality on a single GPU</td></tr>
+<tr><td><strong>Max</strong></td><td>32B</td><td>Qwen2.5-Coder-32B</td><td>Hard design, refactoring and debugging</td></tr>
+</tbody></table></div>
+<h2>Naming</h2>
+<p>Model names follow the conventions used by large AI labs:</p>
+<pre data-lang="text" data-label="anatomy">family   version  tier     size   variant
+Pharo-Coder  1.0     Mini     7B    Instruct     -&gt;  Pharo-Coder-1.0-Mini-7B-Instruct</pre>
+<div class="table-wrap"><table><thead><tr><th>Identifier</th><th>Example</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>Model ID (alias)</td><td><code>pharo-coder-1.0-mini</code></td><td>Always the latest snapshot of this model</td></tr>
+<tr><td>Snapshot ID</td><td><code>pharo-coder-1.0-mini-2026-12-01</code></td><td>A dated, frozen release — pin it for reproducibility</td></tr>
+<tr><td>Hugging Face (Instruct)</td><td><code>pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct</code></td><td>Chat model, safetensors</td></tr>
+<tr><td>Hugging Face (Base)</td><td><code>pharo-llm/Pharo-Coder-1.0-Mini-7B-Base</code></td><td>After Pharo continued pre-training, before chat tuning</td></tr>
+<tr><td>Hugging Face (GGUF)</td><td><code>pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct-GGUF</code></td><td>Quantized files for llama.cpp / Ollama</td></tr>
+<tr><td>Ollama</td><td><code>pharo-llm/pharo-coder:1.0-mini</code></td><td>Also tagged <code>:mini</code>, <code>:7b</code> and <code>:1.0-mini-q8_0</code> etc.</td></tr>
+</tbody></table></div>
+<h2>Versions</h2>
+<ul>
+<li><strong>Minor versions</strong> (1.0 → 1.1) are refreshes with new data and improved fine-tuning on the same recipe and base model.</li>
+<li><strong>Major versions</strong> (1.x → 2.0) change the base model family or the training recipe.</li>
+<li><strong>Snapshots</strong> are dated releases within a version. Every snapshot passes the release gate: it must beat its base model on <a href="/docs/pharoeval.html">PharoEval</a>.</li>
+</ul>
+<h2>All models</h2>
+<div data-models-table></div>
+
+    </main>
+    <nav class="docs__toc" aria-label="On this page"></nav>
+  </div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

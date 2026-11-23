@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+
+  <title>Prompting guide — Pharo-LLM Docs</title>
+</head>
+<body data-page="docs">
+  <div class="docs">
+    <aside class="docs__side" aria-label="Documentation"></aside>
+    <main id="main" class="docs__main prose">
+
+<div class="eyebrow">Use the models</div>
+<h1>Prompting guide</h1>
+<p class="muted" style="font-size:17px">Pharo-Coder was trained on precise, test-backed tasks. Prompts that look like that get the best answers.</p>
+<h2>Name things</h2>
+<p>Give the class name, superclass, and the selectors you want. "Create <code>ParkingGarage</code> with <code>park:</code>, <code>leave:</code> and <code>freeSpots</code>" beats "make a parking program".</p>
+<h2>State edge cases</h2>
+<p>Say what must happen on empty collections, invalid input, or limits ("<code>pop</code> on an empty stack signals an Error"). The model was trained on tasks whose tests cover edge cases and follows them closely.</p>
+<h2>Paste errors verbatim</h2>
+<p>For debugging, paste the code and the exact error or debugger message (e.g. <code>MessageNotUnderstood: receiver of "+" is nil</code>). Pharo-Coder was trained on real Pharo error messages produced by running wrong code.</p>
+<h2>Ask for tests</h2>
+<p>"Also write an SUnit <code>TestCase</code> subclass" produces tests in the standard <code>assert:equals:</code> / <code>should:raise:</code> style.</p>
+<h2>Output format</h2>
+<p>By default answers use the canonical format below, which you can paste into a browser piece by piece. Ask for "Tonel format" if you want a file to load with Iceberg.</p>
+<pre data-lang="smalltalk">Object &lt;&lt; #LimitedStack
+	slots: { #items . #capacity };
+	package: &#x27;MyApp&#x27;
+
+LimitedStack class &gt;&gt; new: anInteger
+	^ self new setCapacity: anInteger
+
+LimitedStack &gt;&gt; push: anObject
+	self isFull ifTrue: [ ^ self error: &#x27;stack is full&#x27; ].
+	^ items addLast: anObject</pre>
+<h2>System prompt</h2>
+<p>The models are trained with this system prompt (already built into the official Ollama models and chat template):</p>
+<pre data-lang="text">You are Pharo-Coder, an expert Pharo Smalltalk engineer. Write correct, idiomatic, runnable Pharo code (Pharo 12+). Define classes with the fluid syntax `Superclass &lt;&lt; #Name slots: { #a }; package: &#x27;Pkg&#x27;` and write each method as `ClassName &gt;&gt; selector` followed by its body. Put code in ```smalltalk fences.</pre>
+
+    </main>
+    <nav class="docs__toc" aria-label="On this page"></nav>
+  </div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
