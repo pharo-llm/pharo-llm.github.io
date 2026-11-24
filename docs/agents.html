@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/app.css" />
+
+  <title>Agents &amp; tool use — Pharo-LLM Docs</title>
+</head>
+<body data-page="docs">
+  <div class="docs">
+    <aside class="docs__side" aria-label="Documentation"></aside>
+    <main id="main" class="docs__main prose">
+<div class="eyebrow">Use the models</div>
+<h1>Agents &amp; tool use</h1>
+<p class="muted" style="font-size:17px">Pharo-Coder is not only a code generator: it is an instruction-tuned assistant that can work as an agent, calling tools in a loop, reading the real results from a Pharo image, and continuing until the task is done.</p>
+<h2>What the agent can do</h2>
+<ul>
+<li>Explore the image: find which class implements a selector, read its source, browse a class.</li>
+<li>Write code, try it with <code>evaluate</code>, read the error, fix it, and run the SUnit tests until they pass.</li>
+<li>Answer questions about the code in your image with facts it looked up instead of guesses.</li>
+</ul>
+<h2>Run the reference agent</h2>
+<p>The <code>pharo-one</code> package ships an agent whose tools run in real headless Pharo images:</p>
+<pre data-lang="bash">pip install &quot;pharo-one @ git+https://github.com/pharo-llm/pharo-one&quot;
+ollama pull pharo-llm/pharo-coder:mini
+pharo-one agent --config configs/pharo-coder-1.0-mini.yaml --model pharo-llm/pharo-coder:mini \
+  &quot;Create a class ShoppingCart with add:, removeAll:, total, and an SUnit test class. Make the tests pass.&quot;</pre>
+<p>Each step is printed: the model's reasoning, every tool call, and the Pharo result. At the end you get the complete code that was built and verified in the session. Example of a real run:</p>
+<pre data-lang="text" data-label="output">→ define {&quot;code&quot;: &quot;Integer &gt;&gt; isPalindromicNumber\n\t^ self asString = self asString reverse&quot;}
+Defined: Integer&gt;&gt;isPalindromicNumber
+
+→ evaluate {&quot;code&quot;: &quot;12321 isPalindromicNumber&quot;}
+true
+
+Pharo-Coder: I added isPalindromicNumber to Integer and verified that 12321 isPalindromicNumber returns true.</pre>
+<h2>Tools</h2>
+<div class="table-wrap"><table><thead><tr><th>Tool</th><th>Arguments</th><th>What it does</th></tr></thead><tbody>
+<tr><td><code>evaluate</code></td><td><code>code</code></td><td>Evaluate Pharo code in the image (with everything defined so far); returns the printString or the error.</td></tr>
+<tr><td><code>define</code></td><td><code>code</code></td><td>Create or update classes and methods (fluid class syntax, <code>ClassName &gt;&gt; selector</code>); returns compile errors.</td></tr>
+<tr><td><code>browse_class</code></td><td><code>class_name</code></td><td>Class definition, comment and selectors (instance and class side).</td></tr>
+<tr><td><code>method_source</code></td><td><code>class_name, selector</code></td><td>Source of a method (append <code> class</code> for class-side).</td></tr>
+<tr><td><code>implementors</code></td><td><code>selector</code></td><td>Methods implementing a selector in the image.</td></tr>
+<tr><td><code>senders</code></td><td><code>selector</code></td><td>Methods sending a selector in the image.</td></tr>
+<tr><td><code>search_classes</code></td><td><code>query</code></td><td>Classes whose name contains a substring.</td></tr>
+<tr><td><code>run_tests</code></td><td><code>class_name</code></td><td>Run an SUnit <code>TestCase</code> subclass and report failures and errors.</td></tr>
+</tbody></table></div>
+<p>Every tool call starts a fresh image and replays the definitions made so far in the session, so runs are isolated and reproducible and nothing touches your own image.</p>
+<h2>Use your own tools</h2>
+<p>Pharo-Coder uses the standard Qwen2.5 / Hermes tool-calling format, so any OpenAI-compatible client with <code>tools</code> works with Ollama or vLLM:</p>
+<pre data-lang="python">from openai import OpenAI
+
+client = OpenAI(base_url=&quot;http://localhost:11434/v1&quot;, api_key=&quot;ollama&quot;)
+tools = [{&quot;type&quot;: &quot;function&quot;, &quot;function&quot;: {
+    &quot;name&quot;: &quot;evaluate&quot;,
+    &quot;description&quot;: &quot;Evaluate Pharo code and return the printString of the result&quot;,
+    &quot;parameters&quot;: {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {&quot;code&quot;: {&quot;type&quot;: &quot;string&quot;}}, &quot;required&quot;: [&quot;code&quot;]}}}]
+messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is 2 raisedTo: 100 in Pharo? Check it.&quot;}]
+
+while True:
+    msg = client.chat.completions.create(model=&quot;pharo-llm/pharo-coder:mini&quot;, messages=messages, tools=tools).choices[0].message
+    messages.append(msg)
+    if not msg.tool_calls:
+        print(msg.content)
+        break
+    for call in msg.tool_calls:
+        result = run_in_pharo(call)          # your implementation
+        messages.append({&quot;role&quot;: &quot;tool&quot;, &quot;tool_call_id&quot;: call.id, &quot;content&quot;: result})</pre>
+<p>With vLLM, start the server with <code>--enable-auto-tool-choice --tool-call-parser hermes</code>.</p>
+<h2>How the agent was trained</h2>
+<p>A teacher model solved thousands of tasks <em>in this exact tool loop</em> against real Pharo images. A trajectory was used for training only if the code it built passed hidden unit tests in strict mode (no unknown selectors, examples run), or, for exploration questions, if the answer stated the fact it looked up. Tool outputs are never trained on; only the model's own decisions and answers are. Agent ability is measured on <a href="/docs/pharoeval.html">PharoEval-Agent</a> and is part of the release gate.</p>
+
+    </main>
+    <nav class="docs__toc" aria-label="On this page"></nav>
+  </div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

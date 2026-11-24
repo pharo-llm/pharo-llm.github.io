@@ -82,6 +82,9 @@
   const pct = (v) => (v == null ? "—" : `${Number(v).toFixed(1)}%`);
   const fmtK = (n) => (n == null ? "—" : n >= 1000 ? `${Math.round(n / 1024)}K` : String(n));
   const pass1 = (m) => m.benchmarks?.pharoeval?.["pass@1"];
+  const CAP_LABEL = { chat: "Chat", questions: "Q&A", code: "Code", debugging: "Debugging", "tool-use": "Tool use", agents: "Agents" };
+  const caps = (m) => (m.capabilities || []).map((c) => `<span class="badge${c === "agents" || c === "tool-use" ? " badge--accent" : ""}">${esc(CAP_LABEL[c] || c)}</span>`).join("");
+  const agent1 = (m) => m.benchmarks?.pharoeval_agent?.["pass@1"];
   const quantTag = (m, q) => [m.version, m.tier === "flagship" ? null : m.tier, q.toLowerCase()].filter(Boolean).join("-");
   const defaultTag = (m) => (m.ollama_tags || [])[1] || (m.ollama_tags || [])[0];
 
@@ -139,6 +142,7 @@
     const gguf = m?.links?.hf_gguf?.split("huggingface.co/")[1] || hf + "-GGUF";
     return tabs([
       { label: "Ollama", lang: "bash", code: `ollama run ${tag} "Write a Pharo class Stack with push:, pop and isEmpty"` },
+      { label: "Agent", lang: "bash", code: `# Pharo-Coder works in a loop with tools backed by a real Pharo image\npip install "pharo-one @ git+https://github.com/pharo-llm/pharo-one"\npharo-one agent --config configs/pharo-coder-1.0-mini.yaml --model ${tag} \\\n  "Create a class ShoppingCart with add:, total and an SUnit test, and make the tests pass"` },
       { label: "OpenAI-compatible API", lang: "bash", code: `# Ollama serves an OpenAI-compatible API on localhost:11434\ncurl http://localhost:11434/v1/chat/completions \\\n  -H "Content-Type: application/json" \\\n  -d '{"model": "${tag}", "messages": [{"role": "user", "content": "Add Integer >> isPerfectNumber"}]}'` },
       { label: "Transformers", lang: "python", file: "python", code: `from transformers import AutoModelForCausalLM, AutoTokenizer\n\nmodel_id = "${hf}"\ntok = AutoTokenizer.from_pretrained(model_id)\nmodel = AutoModelForCausalLM.from_pretrained(model_id, dtype="auto", device_map="auto")\n\nmessages = [{"role": "user", "content": "Write a Pharo class BankAccount"}]\ninputs = tok.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt").to(model.device)\nout = model.generate(inputs, max_new_tokens=1024)\nprint(tok.decode(out[0][inputs.shape[1]:], skip_special_tokens=True))` },
       { label: "llama.cpp", lang: "bash", code: `llama-server -hf ${gguf}:Q4_K_M --ctx-size 8192\n# then use http://localhost:8080/v1/chat/completions` },
@@ -152,6 +156,7 @@
       <div class="card__top">${icon(m)}${statusBadge(m)}</div>
       <h3>${esc(m.display)}</h3>
       <p>${esc(m.description)}</p>
+      ${m.capabilities?.length ? `<div class="chips" style="margin-top:12px;gap:6px">${caps(m)}</div>` : ""}
       <div class="card__meta">
         <span title="Intelligence">Intelligence ${dots(m.ratings?.intelligence)}</span>
         <span title="Speed">Speed ${dots(m.ratings?.speed, 5, "rating--speed")}</span>
@@ -200,7 +205,7 @@
       <a class="link" href="/models.html" style="font-size:14px">← All models</a>
       <div class="model-hero" style="margin-top:18px">${icon(m, true)}
         <div class="model-hero__main"><h1>${esc(m.display)}</h1><p class="muted" style="font-size:16px;max-width:680px">${esc(m.description)}</p>
-          <div class="chips">${statusBadge(m)}${m.base_model ? `<span class="badge">Base: ${esc(m.base_model)}</span>` : ""}<span class="badge">${esc(m.license || "")}</span></div></div>
+          <div class="chips">${statusBadge(m)}${caps(m)}${m.base_model ? `<span class="badge">Base: ${esc(m.base_model)}</span>` : ""}<span class="badge">${esc(m.license || "")}</span></div></div>
         <div class="model-hero__actions">
           <a class="btn" href="/compare.html?model=${encodeURIComponent(m.id)}">Compare</a>
           ${m.links?.hf_instruct ? `<a class="btn" href="${esc(m.links.hf_instruct)}" target="_blank" rel="noopener">🤗 Hugging Face</a>` : ""}
@@ -210,10 +215,11 @@
         <div class="spec"><div class="spec__label">Intelligence</div><div class="spec__value">${dots(m.ratings?.intelligence)}</div></div>
         <div class="spec"><div class="spec__label">Speed</div><div class="spec__value">${dots(m.ratings?.speed, 5, "rating--speed")}</div></div>
         <div class="spec"><div class="spec__label">PharoEval pass@1</div><div class="spec__value">${pct(pe["pass@1"])}</div></div>
+        <div class="spec"><div class="spec__label">PharoEval-Agent pass@1</div><div class="spec__value">${pct(agent1(m))}</div></div>
         <div class="spec"><div class="spec__label">Parameters</div><div class="spec__value">${esc(m.size || "—")}</div></div>
+        <div class="spec"><div class="spec__label">Tool calling</div><div class="spec__value">${(m.capabilities || []).includes("tool-use") ? "Supported" : "—"}</div></div>
         <div class="spec"><div class="spec__label">Context window</div><div class="spec__value">${(m.context_window || 0).toLocaleString()} tokens</div></div>
         <div class="spec"><div class="spec__label">Max output</div><div class="spec__value">${(m.max_output || 0).toLocaleString()} tokens</div></div>
-        <div class="spec"><div class="spec__label">Input / Output</div><div class="spec__value">Text / Text, Code</div></div>
         <div class="spec"><div class="spec__label">Released</div><div class="spec__value">${esc(m.release_date || "—")}</div></div>
       </div>
       <h2>Get started</h2>
@@ -226,6 +232,12 @@
           <tr><td><strong>${esc(m.display)}</strong></td><td class="num best">${pct(pe["pass@1"])}</td><td class="num">${pct(pe.compile_rate)}</td></tr>
           ${Object.entries(m.benchmarks.baselines).map(([k, v]) => `<tr><td>${esc(k)}</td><td class="num">${pct(v["pass@1"])}</td><td class="num">${pct(v.compile_rate)}</td></tr>`).join("")}
           </tbody></table></div>` : ""}`}
+      ${m.benchmarks?.pharoeval_agent?.["pass@1"] != null ? `<h2>Agent results</h2>
+        <p class="muted">PharoEval-Agent: the same problems solved through the Pharo tool loop (evaluate, define, browse, implementors, run_tests…). <a class="link" href="/docs/agents.html">Agents & tool use</a></p>
+        <div class="table-wrap"><table><thead><tr><th>Model</th><th class="num">pass@1</th><th class="num">Avg. tool calls</th><th class="num">Finished</th></tr></thead><tbody>
+          <tr><td><strong>${esc(m.display)}</strong></td><td class="num best">${pct(agent1(m))}</td><td class="num">${m.benchmarks.pharoeval_agent.avg_tool_calls ?? "—"}</td><td class="num">${pct(m.benchmarks.pharoeval_agent.finished_rate)}</td></tr>
+          ${Object.entries(m.benchmarks.agent_baselines || {}).map(([k, v]) => `<tr><td>${esc(k)}</td><td class="num">${pct(v["pass@1"])}</td><td class="num">${v.avg_tool_calls ?? "—"}</td><td class="num">${pct(v.finished_rate)}</td></tr>`).join("")}
+        </tbody></table></div>` : ""}
       <h2>Snapshots</h2>
       <p class="muted">Snapshots pin a dated version of the model. The alias <code>${esc(m.id)}</code> always points to the latest snapshot.</p>
       <div class="table-wrap"><table><thead><tr><th>Snapshot</th><th>Released</th></tr></thead><tbody>
@@ -256,7 +268,9 @@
       ["Intelligence", (m) => dots(m.ratings?.intelligence)],
       ["Speed", (m) => dots(m.ratings?.speed, 5, "rating--speed")],
       ["PharoEval pass@1", (m) => pct(pass1(m)), (m) => pass1(m)],
+      ["PharoEval-Agent pass@1", (m) => pct(agent1(m)), (m) => agent1(m)],
       ["Compile rate", (m) => pct(m.benchmarks?.pharoeval?.compile_rate), (m) => m.benchmarks?.pharoeval?.compile_rate],
+      ["Capabilities", (m) => caps(m) || "—"],
       ["Easy / Medium / Hard", (m) => { const b = m.benchmarks?.pharoeval?.by_difficulty || {}; return `${pct(b.easy)} / ${pct(b.medium)} / ${pct(b.hard)}`; }],
       ["Parameters", (m) => esc(m.size || "—")],
       ["Context window", (m) => `${(m.context_window || 0).toLocaleString()} tokens`],
@@ -283,7 +297,7 @@
   /* ------------------------------------------------------------ docs */
   const DOCS = [
     ["Get started", [["Overview", "/docs/"], ["Quickstart", "/docs/quickstart.html"], ["Models", "/docs/models.html"]]],
-    ["Use the models", [["Ollama", "/docs/ollama.html"], ["Transformers & vLLM", "/docs/transformers.html"], ["llama.cpp & GGUF", "/docs/llama-cpp.html"], ["Inside Pharo", "/docs/pharo.html"], ["Prompting guide", "/docs/prompting.html"]]],
+    ["Use the models", [["Ollama", "/docs/ollama.html"], ["Transformers & vLLM", "/docs/transformers.html"], ["llama.cpp & GGUF", "/docs/llama-cpp.html"], ["Inside Pharo", "/docs/pharo.html"], ["Agents & tool use", "/docs/agents.html"], ["Prompting guide", "/docs/prompting.html"]]],
     ["Research", [["Technical report", "/docs/technical-report.html"], ["PharoEval benchmark", "/docs/pharoeval.html"], ["Training pipeline", "/docs/training.html"]]],
     ["Resources", [["Changelog", "/docs/changelog.html"], ["Privacy & Terms", "/privacy.html"]]],
   ];
@@ -316,8 +330,8 @@
       ${d.models.map((m) => `<tr><td><a class="link" href="/model.html?id=${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a></td><td>${esc(m.tier)}</td><td>${esc(m.size)}</td><td>${esc(m.base_model || "—")}</td><td>${statusBadge(m)}</td></tr>`).join("")}</tbody></table></div>`));
     $$("[data-eval-table]").forEach((el) => {
       const rows = d.models.filter((m) => pass1(m) != null);
-      el.innerHTML = rows.length ? `<div class="table-wrap"><table><thead><tr><th>Model</th><th class="num">Overall</th><th class="num">Easy</th><th class="num">Medium</th><th class="num">Hard</th><th class="num">Compiles</th></tr></thead><tbody>
-        ${rows.map((m) => { const pe = m.benchmarks.pharoeval, b = pe.by_difficulty || {}; return `<tr><td>${esc(m.display)}</td><td class="num">${pct(pe["pass@1"])}</td><td class="num">${pct(b.easy)}</td><td class="num">${pct(b.medium)}</td><td class="num">${pct(b.hard)}</td><td class="num">${pct(pe.compile_rate)}</td></tr>`; }).join("")}
+      el.innerHTML = rows.length ? `<div class="table-wrap"><table><thead><tr><th>Model</th><th class="num">Overall</th><th class="num">Easy</th><th class="num">Medium</th><th class="num">Hard</th><th class="num">Compiles</th><th class="num">Agent</th></tr></thead><tbody>
+        ${rows.map((m) => { const pe = m.benchmarks.pharoeval, b = pe.by_difficulty || {}; return `<tr><td>${esc(m.display)}</td><td class="num">${pct(pe["pass@1"])}</td><td class="num">${pct(b.easy)}</td><td class="num">${pct(b.medium)}</td><td class="num">${pct(b.hard)}</td><td class="num">${pct(pe.compile_rate)}</td><td class="num">${pct(agent1(m))}</td></tr>`; }).join("")}
         </tbody></table></div>` : '<div class="empty">Results are added automatically when a model is released.</div>';
     });
     $$("[data-changelog]").forEach((el) => {

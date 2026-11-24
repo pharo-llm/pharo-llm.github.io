@@ -17,8 +17,8 @@
   <main id="main">
     <section class="hero container">
       <div class="eyebrow">Pharo-Coder 1.0</div>
-      <h1>Open models that <span class="gradient-text">write Pharo</span> that runs.</h1>
-      <p>Pharo-Coder is a family of code models trained on the Pharo ecosystem and verified by executing their answers in real Pharo images. Run them locally with Ollama, or anywhere with Transformers and llama.cpp.</p>
+      <h1>The open AI assistant that <span class="gradient-text">knows Pharo</span>.</h1>
+      <p>Pharo-Coder answers your questions about Pharo, writes, explains and debugs code, and works as an agent that explores the image, runs code and tests, and loops until the job is done. Everything it learned was verified in real Pharo images. Run it locally with Ollama, or anywhere with Transformers, vLLM and llama.cpp.</p>
       <div class="hero__actions">
         <a class="btn btn--primary" href="/docs/quickstart.html">Get started</a>
         <a class="btn" href="/models.html">Explore models</a>
@@ -40,6 +40,8 @@
       <div class="section__head"><h2>Why Pharo-Coder</h2></div>
       <div class="grid grid-3">
         <div class="card"><h3><i class="fa-solid fa-circle-check"></i> Verified by execution</h3><p>Every training answer was installed in a fresh Pharo image, compiled, and had its tests run. Hallucinated classes and methods are filtered out before training.</p></div>
+        <div class="card"><h3><i class="fa-solid fa-comments"></i> Ask it anything about Pharo</h3><p>Concepts, the class library, Iceberg, Metacello, SUnit, the debugger, Spec — answers grounded in real Pharo documentation and the image's own class comments.</p></div>
+        <div class="card"><h3><i class="fa-solid fa-robot"></i> Built for agents</h3><p>Native tool calling. Pharo-Coder evaluates code, defines classes, browses the image, finds implementors and runs tests in a loop — trained on agent runs that were verified by hidden tests.</p></div>
         <div class="card"><h3><i class="fa-solid fa-code"></i> Speaks modern Pharo</h3><p>Fluid class definitions, idiomatic collection protocol, SUnit tests, and the Pharo image's own conventions — learned from the image and permissively licensed GitHub projects.</p></div>
         <div class="card"><h3><i class="fa-solid fa-laptop-code"></i> Runs on your machine</h3><p>From Nano (1.5B) for laptops to Max (32B) for workstations. Quantized GGUF builds for Ollama and llama.cpp, safetensors for Transformers and vLLM.</p></div>
         <div class="card"><h3><i class="fa-solid fa-chart-simple"></i> Measured honestly</h3><p>PharoEval scores come from running each answer against unit tests in Pharo. A release only ships if it beats its base model.</p></div>

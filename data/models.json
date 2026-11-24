@@ -12,7 +12,7 @@
       "status": "planned",
       "release_date": null,
       "snapshots": [],
-      "description": "Fastest and smallest. Runs on any laptop; ideal for completion and simple tasks.",
+      "description": "Fast, small all-round Pharo assistant: answers questions, writes and fixes code, and drives simple tool loops on any laptop.",
       "base_model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
       "context_window": 32768,
       "max_output": 8192,
@@ -22,7 +22,9 @@
       },
       "benchmarks": {
         "pharoeval": {},
-        "baselines": {}
+        "baselines": {},
+        "pharoeval_agent": {},
+        "agent_baselines": {}
       },
       "links": {
         "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Nano-1.5B-Instruct",
@@ -53,7 +55,15 @@
           "default": false
         }
       ],
-      "license": "apache-2.0"
+      "license": "apache-2.0",
+      "capabilities": [
+        "chat",
+        "questions",
+        "code",
+        "debugging",
+        "tool-use",
+        "agents"
+      ]
     },
     {
       "id": "pharo-coder-1.0-mini",
@@ -65,7 +75,7 @@
       "status": "planned",
       "release_date": null,
       "snapshots": [],
-      "description": "Best balance of quality and speed. Recommended default for local Pharo development.",
+      "description": "The recommended Pharo assistant: answers questions about Pharo, writes, explains and debugs code, and works as an agent with tools.",
       "base_model": "Qwen/Qwen2.5-Coder-7B-Instruct",
       "context_window": 32768,
       "max_output": 8192,
@@ -75,7 +85,9 @@
       },
       "benchmarks": {
         "pharoeval": {},
-        "baselines": {}
+        "baselines": {},
+        "pharoeval_agent": {},
+        "agent_baselines": {}
       },
       "links": {
         "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct",
@@ -106,7 +118,15 @@
           "default": false
         }
       ],
-      "license": "apache-2.0"
+      "license": "apache-2.0",
+      "capabilities": [
+        "chat",
+        "questions",
+        "code",
+        "debugging",
+        "tool-use",
+        "agents"
+      ]
     },
     {
       "id": "pharo-coder-1.0",
@@ -118,7 +138,7 @@
       "status": "planned",
       "release_date": null,
       "snapshots": [],
-      "description": "Our most capable model for everyday Pharo development.",
+      "description": "Our most capable everyday Pharo assistant for questions, code, debugging and multi-step agent work.",
       "base_model": "Qwen/Qwen2.5-Coder-14B-Instruct",
       "context_window": 32768,
       "max_output": 8192,
@@ -128,7 +148,9 @@
       },
       "benchmarks": {
         "pharoeval": {},
-        "baselines": {}
+        "baselines": {},
+        "pharoeval_agent": {},
+        "agent_baselines": {}
       },
       "links": {
         "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-14B-Instruct",
@@ -159,7 +181,15 @@
           "default": false
         }
       ],
-      "license": "apache-2.0"
+      "license": "apache-2.0",
+      "capabilities": [
+        "chat",
+        "questions",
+        "code",
+        "debugging",
+        "tool-use",
+        "agents"
+      ]
     },
     {
       "id": "pharo-coder-1.0-max",
@@ -171,7 +201,7 @@
       "status": "planned",
       "release_date": null,
       "snapshots": [],
-      "description": "Maximum quality for hard design, refactoring and debugging tasks.",
+      "description": "Maximum quality for hard design, refactoring, debugging and long agentic tasks in Pharo.",
       "base_model": "Qwen/Qwen2.5-Coder-32B-Instruct",
       "context_window": 32768,
       "max_output": 8192,
@@ -181,7 +211,9 @@
       },
       "benchmarks": {
         "pharoeval": {},
-        "baselines": {}
+        "baselines": {},
+        "pharoeval_agent": {},
+        "agent_baselines": {}
       },
       "links": {
         "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Max-32B-Instruct",
@@ -212,7 +244,15 @@
           "default": false
         }
       ],
-      "license": "apache-2.0"
+      "license": "apache-2.0",
+      "capabilities": [
+        "chat",
+        "questions",
+        "code",
+        "debugging",
+        "tool-use",
+        "agents"
+      ]
     },
     {
       "id": "qwen2.5-coder-sft-3b",
@@ -276,7 +316,11 @@
           "default": true
         }
       ],
-      "license": "apache-2.0"
+      "license": "apache-2.0",
+      "capabilities": [
+        "chat",
+        "code"
+      ]
     }
   ]
 }

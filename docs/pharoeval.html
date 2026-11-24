@@ -35,6 +35,8 @@
 <li>Every problem is verified to <em>fail</em> with an empty answer. Error tests check that the error is not just <code>MessageNotUnderstood</code>, and no selector already exists in the image.</li>
 <li>All training data is decontaminated against PharoEval (exact prompt match and 13-gram overlap with the reference solutions).</li>
 </ul>
+<h2>Agent track: PharoEval-Agent</h2>
+<p>The same problems are also solved <strong>through the Pharo tool loop</strong> (evaluate, define, browse_class, method_source, implementors, senders, search_classes, run_tests; up to 12 steps). The code the agent built during the session plus its final answer is scored with the same hidden tests. We also report the average number of tool calls and how often the agent finishes on its own.</p>
 <h2>Results</h2>
 <div data-eval-table></div>
 <h2>Example problem</h2>

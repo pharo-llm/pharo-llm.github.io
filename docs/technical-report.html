@@ -23,7 +23,7 @@
 <div class="callout callout--accent"><strong>Living document</strong>Tables marked as generated are filled from the released models' data. Each release also ships a full report with that run's exact numbers in <a href="https://github.com/pharo-llm/pharo-llm.github.io/tree/main/reports">/reports</a>.</div>
 
 <h2>Abstract</h2>
-<p>We present <strong>Pharo-Coder 1.0</strong>, a family of open code models (1.5B, 7B, 14B and 32B parameters) specialised for the Pharo Smalltalk language and environment. Starting from Qwen2.5-Coder, we continue pre-training on a deduplicated, syntax-validated corpus of permissively licensed Pharo code; restore instruction following with a chat-vector merge; and fine-tune on conversations whose every code answer was <strong>executed and verified inside a real Pharo image</strong>. We introduce <strong>PharoEval</strong>, an execution-based benchmark of 66 Pharo programming problems, and gate every release on beating its base model there.</p>
+<p>We present <strong>Pharo-Coder 1.0</strong>, a family of open, instruction-tuned assistants (1.5B, 7B, 14B and 32B parameters) specialised for the Pharo Smalltalk language and environment: they answer questions, write and debug code, and act as agents with tools. Starting from Qwen2.5-Coder, we continue pre-training on a deduplicated, syntax-validated corpus of permissively licensed Pharo code; restore instruction following with a chat-vector merge; and fine-tune on conversations whose every code answer was <strong>executed and verified inside a real Pharo image</strong>. We introduce <strong>PharoEval</strong>, an execution-based benchmark of 66 Pharo programming problems with a direct track and an agent track (solved through Pharo-backed tools), and gate every release on both.</p>
 
 <h2>1. Introduction</h2>
 <p>Smalltalk is a rounding error in the corpora of general code models. As a result they mix Pharo with Squeak and GNU Smalltalk, use the class-definition message removed in recent Pharo versions, invent selectors, and seldom produce code that installs and runs. Pharo-Coder addresses these failure modes with three ideas:</p>
@@ -66,6 +66,8 @@
 <li><strong>Rejection sampling.</strong> The teacher answers each task four times, following a strict style guide (plan, complete code in canonical format, explanation, Playground example). Each answer runs in a fresh image in <em>strict</em> mode: all classes and methods compile; every selector sent by the new methods has an implementor in the image (rejecting hallucinated APIs that would compile but never work); all tests pass; the usage example runs without error. The most concise passing answer is kept.</li>
 <li><strong>Repair.</strong> Failing tasks get the real Pharo errors back for up to two rounds. Successful repairs also become multi-turn "here is my error" conversations, trained on the final turn only.</li>
 <li><strong>Grounded explanations</strong> of real methods, whose code blocks must compile.</li>
+<li><strong>Grounded Q&amp;A.</strong> From real class comments and documentation, the teacher writes conversations (one in three multi-turn) covering concepts, how-to, comparisons, debugging and design; plus direct answers to core Pharo topics (Metacello, Iceberg, Traits, exceptions, Announcements, SUnit, processes, …). Code in answers must compile and examples must run.</li>
+<li><strong>Agent trajectories.</strong> The teacher works in the real tool loop (8 Pharo-backed tools). Build tasks are kept only if the agent used tools and the code it built passes the hidden tests in strict mode; exploration tasks ("where is <code>#foo</code> implemented and what does it do?") only if the answer names the class found in the image. The student trains on its own tool calls and answers, never on tool outputs.</li>
 <li><strong>Real-code tasks</strong>: methods whose leading comment specifies them become "implement this method in this class" tasks; class comments become documentation tasks.</li>
 </ol>
 <h3>5.3 Mixture and training</h3>
@@ -76,8 +78,10 @@
 <p>66 problems across 14 categories, each with executable tests. A problem is solved only if the answer installs in a fresh image and all tests pass. References are verified to pass and empty answers to fail. See <a href="/docs/pharoeval.html">PharoEval</a>.</p>
 <h3>6.2 Results (generated)</h3>
 <div data-eval-table></div>
-<h3>6.3 Release gate</h3>
-<p>A model is exported and published only if (a) its PharoEval pass@1 exceeds a tier-specific minimum and (b) it beats its own base instruct model by at least 5 points. The default quantized GGUF is then re-evaluated <em>through Ollama</em>, testing the exact artifact users download, and the release is blocked if it loses more than 5 points.</p>
+<h3>6.3 Agent track</h3>
+<p>PharoEval-Agent solves the same problems through the tool loop and scores the code built in the session. Results appear in the <em>Agent</em> column of the table above.</p>
+<h3>6.4 Release gate</h3>
+<p>A model is exported and published only if (a) its PharoEval pass@1 exceeds a tier-specific minimum and (b) it beats its own base instruct model by at least 5 points, and (c) its agent score is not below the base model's. Tool calling of the Ollama build is re-checked on the agent track. The default quantized GGUF is then re-evaluated <em>through Ollama</em>, testing the exact artifact users download, and the release is blocked if it loses more than 5 points.</p>
 
 <h2>7. Limitations</h2>
 <ul>

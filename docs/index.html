@@ -27,8 +27,10 @@
   <a class="card" href="/docs/technical-report.html"><h3>Technical report</h3><p>Data, training recipe and evaluation in detail.</p></a>
 </div>
 <h2>What is Pharo-Coder?</h2>
-<p>Pharo-Coder is a family of open-weight code models specialised for <a href="https://pharo.org">Pharo</a>. They are built on the Qwen2.5-Coder family, continue pre-training on Pharo code, and are fine-tuned on conversations whose code was <strong>executed and verified in real Pharo images</strong>.</p>
+<p>Pharo-Coder is a family of open-weight, instruction-tuned assistants specialised for <a href="https://pharo.org">Pharo</a>, for questions, code and agents. They are built on the Qwen2.5-Coder family, continue pre-training on Pharo code, and are fine-tuned on conversations whose code was <strong>executed and verified in real Pharo images</strong>.</p>
 <ul>
+  <li><strong>Answer questions</strong> about the Pharo language, class library, tools (Iceberg, Metacello, SUnit, debugger) and ecosystem.</li>
+  <li><strong>Work as an agent</strong>: call tools in a loop (evaluate, define, browse, implementors, run tests) until the task is done. See <a href="/docs/agents.html">Agents &amp; tool use</a>.</li>
   <li><strong>Write</strong> classes, methods and extension methods in modern Pharo (fluid class definitions, idiomatic collection protocol).</li>
   <li><strong>Fix</strong> bugs from code and error messages, <strong>explain</strong> unfamiliar code, <strong>write SUnit tests</strong>.</li>
   <li><strong>Translate</strong> Python, Java or JavaScript to idiomatic Pharo.</li>
