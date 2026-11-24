@@ -28,8 +28,8 @@
 <h2>Run the reference agent</h2>
 <p>The <code>pharo-one</code> package ships an agent whose tools run in real headless Pharo images:</p>
 <pre data-lang="bash">pip install &quot;pharo-one @ git+https://github.com/pharo-llm/pharo-one&quot;
-ollama pull pharo-llm/pharo-coder:mini
-pharo-one agent --config configs/pharo-coder-1.0-mini.yaml --model pharo-llm/pharo-coder:mini \
+ollama pull pharo-llm/pharo-coder:7b
+pharo-one agent --config configs/pharo-coder-1.0-7b.yaml --model pharo-llm/pharo-coder:7b \
   &quot;Create a class ShoppingCart with add:, removeAll:, total, and an SUnit test class. Make the tests pass.&quot;</pre>
 <p>Each step is printed: the model's reasoning, every tool call, and the Pharo result. At the end you get the complete code that was built and verified in the session. Example of a real run:</p>
 <pre data-lang="text" data-label="output">→ define {&quot;code&quot;: &quot;Integer &gt;&gt; isPalindromicNumber\n\t^ self asString = self asString reverse&quot;}
@@ -63,7 +63,7 @@ tools = [{&quot;type&quot;: &quot;function&quot;, &quot;function&quot;: {
 messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is 2 raisedTo: 100 in Pharo? Check it.&quot;}]
 
 while True:
-    msg = client.chat.completions.create(model=&quot;pharo-llm/pharo-coder:mini&quot;, messages=messages, tools=tools).choices[0].message
+    msg = client.chat.completions.create(model=&quot;pharo-llm/pharo-coder:7b&quot;, messages=messages, tools=tools).choices[0].message
     messages.append(msg)
     if not msg.tool_calls:
         print(msg.content)

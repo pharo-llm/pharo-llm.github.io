@@ -29,12 +29,12 @@
 <p>The default quantization of every release is re-evaluated on PharoEval through Ollama before it is published; a release is blocked if it loses more than 5 points against bf16.</p>
 <h2>Run with llama.cpp</h2>
 <pre data-lang="bash"># download + run directly from Hugging Face
-llama-cli -hf pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct-GGUF:Q4_K_M -cnv
+llama-cli -hf pharo-llm/Pharo-Coder-1.0-7B-Instruct-GGUF:Q4_K_M -cnv
 
 # or serve an OpenAI-compatible API
-llama-server -hf pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct-GGUF:Q4_K_M --ctx-size 16384 --port 8080</pre>
+llama-server -hf pharo-llm/Pharo-Coder-1.0-7B-Instruct-GGUF:Q4_K_M --ctx-size 16384 --port 8080</pre>
 <h2>Use a GGUF file with Ollama</h2>
-<pre data-lang="text" data-label="Modelfile">FROM ./Pharo-Coder-1.0-Mini-7B-Instruct-Q4_K_M.gguf
+<pre data-lang="text" data-label="Modelfile">FROM ./Pharo-Coder-1.0-7B-Instruct-Q4_K_M.gguf
 TEMPLATE &quot;&quot;&quot;{{{{- if .System }}}}&lt;|im_start|&gt;system
 {{{{ .System }}}}&lt;|im_end|&gt;
 {{{{ end }}}}{{{{- range .Messages }}}}&lt;|im_start|&gt;{{{{ .Role }}}}

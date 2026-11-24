@@ -69,8 +69,10 @@
     }
     return _data;
   }
-  const initials = (m) => (m.tier === "legacy" ? "v0" : ({ nano: "N", mini: "M", flagship: "1", max: "X" }[m.tier] || "P") + (m.tier === "flagship" ? ".0" : ""));
-  const icon = (m, lg) => `<div class="model-icon ${lg ? "model-icon--lg" : ""} tier-${esc(m.tier)}">${esc(initials(m))}</div>`;
+  // Icons and colours are keyed by parameter count (the size is part of the model name).
+  const sizeClass = (m) => (m.family === "Pharo-Coder" ? "size-" + String(m.size || "").toLowerCase().replace(".", "-") : "size-legacy");
+  const initials = (m) => (m.family === "Pharo-Coder" ? String(m.size || "") : "v0");
+  const icon = (m, lg) => `<div class="model-icon ${lg ? "model-icon--lg" : ""} ${sizeClass(m)}">${esc(initials(m))}</div>`;
   const dots = (n, max = 5, cls = "") => n == null ? '<span class="faint">—</span>'
     : `<span class="rating ${cls}" title="${n} / ${max}">${Array.from({ length: max }, (_, i) => `<i class="${i < n ? "on" : ""}"></i>`).join("")}</span>`;
   const statusBadge = (m) => ({
@@ -85,7 +87,7 @@
   const CAP_LABEL = { chat: "Chat", questions: "Q&A", code: "Code", debugging: "Debugging", "tool-use": "Tool use", agents: "Agents" };
   const caps = (m) => (m.capabilities || []).map((c) => `<span class="badge${c === "agents" || c === "tool-use" ? " badge--accent" : ""}">${esc(CAP_LABEL[c] || c)}</span>`).join("");
   const agent1 = (m) => m.benchmarks?.pharoeval_agent?.["pass@1"];
-  const quantTag = (m, q) => [m.version, m.tier === "flagship" ? null : m.tier, q.toLowerCase()].filter(Boolean).join("-");
+  const quantTag = (m, q) => [m.version, String(m.size || "").toLowerCase(), q.toLowerCase()].join("-");
   const defaultTag = (m) => (m.ollama_tags || [])[1] || (m.ollama_tags || [])[0];
 
   /* ------------------------------------------------------------ code blocks */
@@ -137,12 +139,12 @@
   }
 
   function quickstartTabs(m) {
-    const tag = m ? `${m.links?.ollama?.split("ollama.com/")[1] || "pharo-llm/pharo-coder"}:${defaultTag(m) || "mini"}` : "pharo-llm/pharo-coder:mini";
-    const hf = m?.links?.hf_instruct?.split("huggingface.co/")[1] || "pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct";
+    const tag = m ? `${m.links?.ollama?.split("ollama.com/")[1] || "pharo-llm/pharo-coder"}:${defaultTag(m) || "7b"}` : "pharo-llm/pharo-coder:7b";
+    const hf = m?.links?.hf_instruct?.split("huggingface.co/")[1] || "pharo-llm/Pharo-Coder-1.0-7B-Instruct";
     const gguf = m?.links?.hf_gguf?.split("huggingface.co/")[1] || hf + "-GGUF";
     return tabs([
       { label: "Ollama", lang: "bash", code: `ollama run ${tag} "Write a Pharo class Stack with push:, pop and isEmpty"` },
-      { label: "Agent", lang: "bash", code: `# Pharo-Coder works in a loop with tools backed by a real Pharo image\npip install "pharo-one @ git+https://github.com/pharo-llm/pharo-one"\npharo-one agent --config configs/pharo-coder-1.0-mini.yaml --model ${tag} \\\n  "Create a class ShoppingCart with add:, total and an SUnit test, and make the tests pass"` },
+      { label: "Agent", lang: "bash", code: `# Pharo-Coder works in a loop with tools backed by a real Pharo image\npip install "pharo-one @ git+https://github.com/pharo-llm/pharo-one"\npharo-one agent --config configs/pharo-coder-1.0-7b.yaml --model ${tag} \\\n  "Create a class ShoppingCart with add:, total and an SUnit test, and make the tests pass"` },
       { label: "OpenAI-compatible API", lang: "bash", code: `# Ollama serves an OpenAI-compatible API on localhost:11434\ncurl http://localhost:11434/v1/chat/completions \\\n  -H "Content-Type: application/json" \\\n  -d '{"model": "${tag}", "messages": [{"role": "user", "content": "Add Integer >> isPerfectNumber"}]}'` },
       { label: "Transformers", lang: "python", file: "python", code: `from transformers import AutoModelForCausalLM, AutoTokenizer\n\nmodel_id = "${hf}"\ntok = AutoTokenizer.from_pretrained(model_id)\nmodel = AutoModelForCausalLM.from_pretrained(model_id, dtype="auto", device_map="auto")\n\nmessages = [{"role": "user", "content": "Write a Pharo class BankAccount"}]\ninputs = tok.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt").to(model.device)\nout = model.generate(inputs, max_new_tokens=1024)\nprint(tok.decode(out[0][inputs.shape[1]:], skip_special_tokens=True))` },
       { label: "llama.cpp", lang: "bash", code: `llama-server -hf ${gguf}:Q4_K_M --ctx-size 8192\n# then use http://localhost:8080/v1/chat/completions` },
@@ -174,13 +176,13 @@
 
   async function pageModels() {
     const d = await data();
-    const tiers = [["all", "All"], ["available", "Available"], ["nano", "Nano"], ["mini", "Mini"], ["flagship", "Flagship"], ["max", "Max"], ["deprecated", "Deprecated"]];
+    const tiers = [["all", "All"], ["available", "Available"], ["1.5B", "1.5B"], ["7B", "7B"], ["14B", "14B"], ["32B", "32B"], ["deprecated", "Deprecated"]];
     let filter = new URLSearchParams(location.search).get("filter") || "all";
     const chips = $("#filters");
     const grid = $("#catalog");
     function render() {
       chips.innerHTML = tiers.map(([k, t]) => `<button class="chip ${k === filter ? "active" : ""}" data-f="${k}">${t}</button>`).join("");
-      const list = d.models.filter((m) => filter === "all" ? m.status !== "deprecated" : filter === "available" || filter === "deprecated" ? m.status === filter : m.tier === filter);
+      const list = d.models.filter((m) => filter === "all" ? m.status !== "deprecated" : filter === "available" || filter === "deprecated" ? m.status === filter : m.size === filter && m.family === "Pharo-Coder");
       grid.innerHTML = list.map(modelCard).join("") || '<div class="empty">No models in this category yet.</div>';
       $("#rows").innerHTML = d.models.map((m) => `<tr>
         <td><a class="link" href="/model.html?id=${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a></td>
@@ -227,7 +229,7 @@
       <h2>PharoEval results</h2>
       ${pe["pass@1"] == null ? '<div class="empty">Benchmarks are published together with the model.</div>' : `
         <p class="muted">Execution-based: every answer is installed in a fresh Pharo image and must pass all unit tests. Greedy decoding. <a class="link" href="/docs/pharoeval.html">About PharoEval</a></p>
-        <div class="bars tier-${esc(m.tier)}">${cats.map(([c, v]) => `<div class="bar"><span>${esc(c)}</span><div class="bar__track"><div class="bar__fill" style="width:${v || 0}%"></div></div><span class="num">${pct(v)}</span></div>`).join("")}</div>
+        <div class="bars ${sizeClass(m)}">${cats.map(([c, v]) => `<div class="bar"><span>${esc(c)}</span><div class="bar__track"><div class="bar__fill" style="width:${v || 0}%"></div></div><span class="num">${pct(v)}</span></div>`).join("")}</div>
         ${Object.keys(m.benchmarks?.baselines || {}).length ? `<h3>Compared with</h3><div class="table-wrap"><table><thead><tr><th>Model</th><th class="num">pass@1</th><th class="num">Compiles</th></tr></thead><tbody>
           <tr><td><strong>${esc(m.display)}</strong></td><td class="num best">${pct(pe["pass@1"])}</td><td class="num">${pct(pe.compile_rate)}</td></tr>
           ${Object.entries(m.benchmarks.baselines).map(([k, v]) => `<tr><td>${esc(k)}</td><td class="num">${pct(v["pass@1"])}</td><td class="num">${pct(v.compile_rate)}</td></tr>`).join("")}
@@ -326,8 +328,8 @@
     if (!need.length) return;
     const d = await data();
     $$("[data-quickstart]").forEach((el) => (el.innerHTML = quickstartTabs(d.models.find((m) => m.id === d.default_model))));
-    $$("[data-models-table]").forEach((el) => (el.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Model ID</th><th>Tier</th><th>Size</th><th>Base model</th><th>Status</th></tr></thead><tbody>
-      ${d.models.map((m) => `<tr><td><a class="link" href="/model.html?id=${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a></td><td>${esc(m.tier)}</td><td>${esc(m.size)}</td><td>${esc(m.base_model || "—")}</td><td>${statusBadge(m)}</td></tr>`).join("")}</tbody></table></div>`));
+    $$("[data-models-table]").forEach((el) => (el.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Model ID</th><th>Name</th><th>Size</th><th>Base model</th><th>Status</th></tr></thead><tbody>
+      ${d.models.map((m) => `<tr><td><a class="link" href="/model.html?id=${encodeURIComponent(m.id)}"><code>${esc(m.id)}</code></a></td><td>${esc(m.display)}</td><td>${esc(m.size)}</td><td>${esc(m.base_model || "—")}</td><td>${statusBadge(m)}</td></tr>`).join("")}</tbody></table></div>`));
     $$("[data-eval-table]").forEach((el) => {
       const rows = d.models.filter((m) => pass1(m) != null);
       el.innerHTML = rows.length ? `<div class="table-wrap"><table><thead><tr><th>Model</th><th class="num">Overall</th><th class="num">Easy</th><th class="num">Medium</th><th class="num">Hard</th><th class="num">Compiles</th><th class="num">Agent</th></tr></thead><tbody>

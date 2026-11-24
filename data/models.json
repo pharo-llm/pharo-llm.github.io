@@ -1,13 +1,12 @@
 {
   "updated": "2026-11-23",
-  "default_model": "pharo-coder-1.0-mini",
+  "default_model": "pharo-coder-1.0-7b",
   "models": [
     {
-      "id": "pharo-coder-1.0-nano",
-      "display": "Pharo-Coder 1.0 Nano",
+      "id": "pharo-coder-1.0-1.5b",
+      "display": "Pharo-Coder 1.0 1.5B",
       "family": "Pharo-Coder",
       "version": "1.0",
-      "tier": "nano",
       "size": "1.5B",
       "status": "planned",
       "release_date": null,
@@ -26,17 +25,24 @@
         "pharoeval_agent": {},
         "agent_baselines": {}
       },
+      "capabilities": [
+        "chat",
+        "questions",
+        "code",
+        "debugging",
+        "tool-use",
+        "agents"
+      ],
       "links": {
-        "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Nano-1.5B-Instruct",
-        "hf_base": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Nano-1.5B-Base",
-        "hf_gguf": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Nano-1.5B-Instruct-GGUF",
+        "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-1.5B-Instruct",
+        "hf_base": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-1.5B-Base",
+        "hf_gguf": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-1.5B-Instruct-GGUF",
         "ollama": "https://ollama.com/pharo-llm/pharo-coder"
       },
       "ollama_tags": [
-        "1.0-nano-q4_k_m",
-        "1.0-nano",
-        "nano",
-        "1.5b"
+        "1.0-1.5b-q4_k_m",
+        "1.5b",
+        "1.0-1.5b"
       ],
       "quantizations": [
         {
@@ -55,22 +61,13 @@
           "default": false
         }
       ],
-      "license": "apache-2.0",
-      "capabilities": [
-        "chat",
-        "questions",
-        "code",
-        "debugging",
-        "tool-use",
-        "agents"
-      ]
+      "license": "apache-2.0"
     },
     {
-      "id": "pharo-coder-1.0-mini",
-      "display": "Pharo-Coder 1.0 Mini",
+      "id": "pharo-coder-1.0-7b",
+      "display": "Pharo-Coder 1.0 7B",
       "family": "Pharo-Coder",
       "version": "1.0",
-      "tier": "mini",
       "size": "7B",
       "status": "planned",
       "release_date": null,
@@ -89,17 +86,25 @@
         "pharoeval_agent": {},
         "agent_baselines": {}
       },
+      "capabilities": [
+        "chat",
+        "questions",
+        "code",
+        "debugging",
+        "tool-use",
+        "agents"
+      ],
       "links": {
-        "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct",
-        "hf_base": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Mini-7B-Base",
-        "hf_gguf": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct-GGUF",
+        "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-7B-Instruct",
+        "hf_base": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-7B-Base",
+        "hf_gguf": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-7B-Instruct-GGUF",
         "ollama": "https://ollama.com/pharo-llm/pharo-coder"
       },
       "ollama_tags": [
-        "1.0-mini-q4_k_m",
-        "1.0-mini",
-        "mini",
-        "7b"
+        "1.0-7b-q4_k_m",
+        "7b",
+        "1.0-7b",
+        "latest"
       ],
       "quantizations": [
         {
@@ -118,22 +123,13 @@
           "default": false
         }
       ],
-      "license": "apache-2.0",
-      "capabilities": [
-        "chat",
-        "questions",
-        "code",
-        "debugging",
-        "tool-use",
-        "agents"
-      ]
+      "license": "apache-2.0"
     },
     {
-      "id": "pharo-coder-1.0",
-      "display": "Pharo-Coder 1.0",
+      "id": "pharo-coder-1.0-14b",
+      "display": "Pharo-Coder 1.0 14B",
       "family": "Pharo-Coder",
       "version": "1.0",
-      "tier": "flagship",
       "size": "14B",
       "status": "planned",
       "release_date": null,
@@ -152,6 +148,14 @@
         "pharoeval_agent": {},
         "agent_baselines": {}
       },
+      "capabilities": [
+        "chat",
+        "questions",
+        "code",
+        "debugging",
+        "tool-use",
+        "agents"
+      ],
       "links": {
         "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-14B-Instruct",
         "hf_base": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-14B-Base",
@@ -159,10 +163,9 @@
         "ollama": "https://ollama.com/pharo-llm/pharo-coder"
       },
       "ollama_tags": [
-        "1.0-q4_k_m",
-        "1.0",
-        "latest",
-        "14b"
+        "1.0-14b-q4_k_m",
+        "14b",
+        "1.0-14b"
       ],
       "quantizations": [
         {
@@ -181,22 +184,13 @@
           "default": false
         }
       ],
-      "license": "apache-2.0",
-      "capabilities": [
-        "chat",
-        "questions",
-        "code",
-        "debugging",
-        "tool-use",
-        "agents"
-      ]
+      "license": "apache-2.0"
     },
     {
-      "id": "pharo-coder-1.0-max",
-      "display": "Pharo-Coder 1.0 Max",
+      "id": "pharo-coder-1.0-32b",
+      "display": "Pharo-Coder 1.0 32B",
       "family": "Pharo-Coder",
       "version": "1.0",
-      "tier": "max",
       "size": "32B",
       "status": "planned",
       "release_date": null,
@@ -215,17 +209,24 @@
         "pharoeval_agent": {},
         "agent_baselines": {}
       },
+      "capabilities": [
+        "chat",
+        "questions",
+        "code",
+        "debugging",
+        "tool-use",
+        "agents"
+      ],
       "links": {
-        "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Max-32B-Instruct",
-        "hf_base": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Max-32B-Base",
-        "hf_gguf": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-Max-32B-Instruct-GGUF",
+        "hf_instruct": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-32B-Instruct",
+        "hf_base": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-32B-Base",
+        "hf_gguf": "https://huggingface.co/pharo-llm/Pharo-Coder-1.0-32B-Instruct-GGUF",
         "ollama": "https://ollama.com/pharo-llm/pharo-coder"
       },
       "ollama_tags": [
-        "1.0-max-q4_k_m",
-        "1.0-max",
-        "max",
-        "32b"
+        "1.0-32b-q4_k_m",
+        "32b",
+        "1.0-32b"
       ],
       "quantizations": [
         {
@@ -244,22 +245,13 @@
           "default": false
         }
       ],
-      "license": "apache-2.0",
-      "capabilities": [
-        "chat",
-        "questions",
-        "code",
-        "debugging",
-        "tool-use",
-        "agents"
-      ]
+      "license": "apache-2.0"
     },
     {
       "id": "qwen2.5-coder-sft-3b",
       "display": "Qwen2.5-Coder-SFT 3B (legacy)",
       "family": "Legacy",
       "version": "0",
-      "tier": "legacy",
       "size": "3B",
       "status": "deprecated",
       "release_date": null,

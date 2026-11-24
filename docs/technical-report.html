@@ -81,7 +81,7 @@
 <h3>6.3 Agent track</h3>
 <p>PharoEval-Agent solves the same problems through the tool loop and scores the code built in the session. Results appear in the <em>Agent</em> column of the table above.</p>
 <h3>6.4 Release gate</h3>
-<p>A model is exported and published only if (a) its PharoEval pass@1 exceeds a tier-specific minimum and (b) it beats its own base instruct model by at least 5 points, and (c) its agent score is not below the base model's. Tool calling of the Ollama build is re-checked on the agent track. The default quantized GGUF is then re-evaluated <em>through Ollama</em>, testing the exact artifact users download, and the release is blocked if it loses more than 5 points.</p>
+<p>A model is exported and published only if (a) its PharoEval pass@1 exceeds a size-specific minimum and (b) it beats its own base instruct model by at least 5 points, and (c) its agent score is not below the base model's. Tool calling of the Ollama build is re-checked on the agent track. The default quantized GGUF is then re-evaluated <em>through Ollama</em>, testing the exact artifact users download, and the release is blocked if it loses more than 5 points.</p>
 
 <h2>7. Limitations</h2>
 <ul>

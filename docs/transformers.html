@@ -24,7 +24,7 @@
 <pre data-lang="bash">pip install -U transformers accelerate torch</pre>
 <pre data-lang="python">from transformers import AutoModelForCausalLM, AutoTokenizer
 
-model_id = &quot;pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct&quot;
+model_id = &quot;pharo-llm/Pharo-Coder-1.0-7B-Instruct&quot;
 tok = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(model_id, dtype=&quot;auto&quot;, device_map=&quot;auto&quot;)
 
@@ -35,9 +35,9 @@ print(tok.decode(out[0][inputs.shape[1]:], skip_special_tokens=True))</pre>
 <p>The chat template inserts the Pharo-Coder system prompt automatically when you don't provide one.</p>
 <h2>vLLM (OpenAI-compatible server)</h2>
 <pre data-lang="bash">pip install vllm
-vllm serve pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct --max-model-len 32768</pre>
+vllm serve pharo-llm/Pharo-Coder-1.0-7B-Instruct --max-model-len 32768</pre>
 <pre data-lang="bash">curl http://localhost:8000/v1/chat/completions -H &quot;Content-Type: application/json&quot; -d &#x27;{
-  &quot;model&quot;: &quot;pharo-llm/Pharo-Coder-1.0-Mini-7B-Instruct&quot;,
+  &quot;model&quot;: &quot;pharo-llm/Pharo-Coder-1.0-7B-Instruct&quot;,
   &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Write String &gt;&gt; isPalindromeIgnoringCase&quot;}]
 }&#x27;</pre>
 <h2>Fine-tuning further</h2>

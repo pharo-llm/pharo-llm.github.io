@@ -48,8 +48,8 @@
     - &quot;[(LimitedStack new: 3) pop. false] on: Error do: [:e | (e isKindOf: MessageNotUnderstood) not]&quot;</pre>
 <h2>Run it yourself</h2>
 <pre data-lang="bash">pip install -e &quot;git+https://github.com/pharo-llm/pharo-one#egg=pharo-one&quot;
-pharo-one eval --config configs/pharo-coder-1.0-mini.yaml --name &quot;my model&quot; \
-  --openai-model pharo-llm/pharo-coder:mini --base-url http://localhost:11434/v1</pre>
+pharo-one eval --config configs/pharo-coder-1.0-7b.yaml --name &quot;my model&quot; \
+  --openai-model pharo-llm/pharo-coder:7b --base-url http://localhost:11434/v1</pre>
 
     </main>
     <nav class="docs__toc" aria-label="On this page"></nav>

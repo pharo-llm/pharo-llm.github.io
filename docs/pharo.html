@@ -21,12 +21,12 @@
 <h1>Inside Pharo</h1>
 <p class="muted" style="font-size:17px">Call Pharo-Coder from Pharo code through Ollama's HTTP API.</p>
 <h2>ChatPharo</h2>
-<p><a href="https://pharo-llm.github.io/chatpharo/">ChatPharo</a> brings a chat assistant into the Pharo IDE. Select the Ollama provider in its settings and enter a Pharo-Coder model name, e.g. <code>pharo-llm/pharo-coder:mini</code>.</p>
+<p><a href="https://pharo-llm.github.io/chatpharo/">ChatPharo</a> brings a chat assistant into the Pharo IDE. Select the Ollama provider in its settings and enter a Pharo-Coder model name, e.g. <code>pharo-llm/pharo-coder:7b</code>.</p>
 <h2>Plain Zinc + STON</h2>
 <p>This works in a fresh Pharo image with nothing else installed (tested on Pharo 14):</p>
 <pre data-lang="smalltalk" data-label="Playground">| body response answer |
 body := STONJSON toString: (Dictionary new
-	at: &#x27;model&#x27; put: &#x27;pharo-llm/pharo-coder:mini&#x27;;
+	at: &#x27;model&#x27; put: &#x27;pharo-llm/pharo-coder:7b&#x27;;
 	at: &#x27;stream&#x27; put: false;
 	at: &#x27;messages&#x27; put: { Dictionary new
 		at: &#x27;role&#x27; put: &#x27;user&#x27;;
