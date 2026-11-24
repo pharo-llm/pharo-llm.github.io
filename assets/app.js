@@ -87,6 +87,12 @@
   const CAP_LABEL = { chat: "Chat", questions: "Q&A", code: "Code", debugging: "Debugging", "tool-use": "Tool use", agents: "Agents" };
   const caps = (m) => (m.capabilities || []).map((c) => `<span class="badge${c === "agents" || c === "tool-use" ? " badge--accent" : ""}">${esc(CAP_LABEL[c] || c)}</span>`).join("");
   const agent1 = (m) => m.benchmarks?.pharoeval_agent?.["pass@1"];
+  const LICENSE_LABEL = { "apache-2.0": "Apache-2.0", "qwen-research": "Qwen Research license (non-commercial)" };
+  const licenseBadge = (m) => {
+    const label = esc(LICENSE_LABEL[m.license] || m.license || "");
+    const cls = m.license === "qwen-research" ? "badge badge--warn" : "badge";
+    return m.license_link ? `<a class="${cls}" href="${esc(m.license_link)}" target="_blank" rel="noopener">${label}</a>` : `<span class="${cls}">${label}</span>`;
+  };
   const quantTag = (m, q) => [m.version, String(m.size || "").toLowerCase(), q.toLowerCase()].join("-");
   const defaultTag = (m) => (m.ollama_tags || [])[1] || (m.ollama_tags || [])[0];
 
@@ -170,13 +176,13 @@
   /* ------------------------------------------------------------ pages */
   async function pageHome() {
     const d = await data();
-    $("#featured").innerHTML = d.models.filter((m) => m.family === "Pharo-Coder" && m.status !== "deprecated").slice(0, 4).map(modelCard).join("");
+    $("#featured").innerHTML = d.models.filter((m) => m.family === "Pharo-Coder" && m.status !== "deprecated").map(modelCard).join("");
     $("#quickstart").innerHTML = quickstartTabs(d.models.find((m) => m.id === d.default_model));
   }
 
   async function pageModels() {
     const d = await data();
-    const tiers = [["all", "All"], ["available", "Available"], ["1.5B", "1.5B"], ["7B", "7B"], ["14B", "14B"], ["32B", "32B"], ["deprecated", "Deprecated"]];
+    const tiers = [["all", "All"], ["available", "Available"], ["1.5B", "1.5B"], ["3B", "3B"], ["7B", "7B"], ["14B", "14B"], ["32B", "32B"], ["deprecated", "Deprecated"]];
     let filter = new URLSearchParams(location.search).get("filter") || "all";
     const chips = $("#filters");
     const grid = $("#catalog");
@@ -207,7 +213,7 @@
       <a class="link" href="/models.html" style="font-size:14px">← All models</a>
       <div class="model-hero" style="margin-top:18px">${icon(m, true)}
         <div class="model-hero__main"><h1>${esc(m.display)}</h1><p class="muted" style="font-size:16px;max-width:680px">${esc(m.description)}</p>
-          <div class="chips">${statusBadge(m)}${caps(m)}${m.base_model ? `<span class="badge">Base: ${esc(m.base_model)}</span>` : ""}<span class="badge">${esc(m.license || "")}</span></div></div>
+          <div class="chips">${statusBadge(m)}${caps(m)}${m.base_model ? `<span class="badge">Base: ${esc(m.base_model)}</span>` : ""}${licenseBadge(m)}</div></div>
         <div class="model-hero__actions">
           <a class="btn" href="/compare.html?model=${encodeURIComponent(m.id)}">Compare</a>
           ${m.links?.hf_instruct ? `<a class="btn" href="${esc(m.links.hf_instruct)}" target="_blank" rel="noopener">🤗 Hugging Face</a>` : ""}
@@ -280,7 +286,7 @@
       ["Base model", (m) => esc(m.base_model || "—")],
       ["Quantizations", (m) => (m.quantizations || []).map((x) => esc(x.name)).join(", ") || "—"],
       ["Latest snapshot", (m) => (m.snapshots?.[0] ? `<code>${esc(m.snapshots[0].id)}</code>` : "—")],
-      ["License", (m) => esc(m.license || "—")],
+      ["License", (m) => licenseBadge(m)],
     ];
     function render() {
       const models = sel.map((s) => d.models.find((m) => m.id === s.value)).filter(Boolean);

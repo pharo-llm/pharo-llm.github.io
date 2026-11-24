@@ -22,8 +22,10 @@
 <p class="muted" style="font-size:17px">How Pharo-Coder models are organised, named and versioned.</p>
 <h2>Sizes</h2>
 <p>The parameter count is part of the name, like Qwen and Llama. All sizes have the same abilities (questions, code, debugging, tool use, agents); larger ones are more accurate.</p>
+<div class="callout"><strong>License</strong>The 1.5B, 7B, 14B and 32B models are Apache-2.0. The 3B model inherits the <a href="https://huggingface.co/Qwen/Qwen2.5-Coder-3B-Instruct/blob/main/LICENSE">Qwen Research License</a> of its base model: free for research and non-commercial use; commercial use requires permission from Qwen.</div>
 <div class="table-wrap"><table><thead><tr><th>Model</th><th>Base model</th><th>Memory (Q4_K_M)</th><th>Use it for</th></tr></thead><tbody>
 <tr><td><strong>Pharo-Coder 1.0 1.5B</strong></td><td>Qwen2.5-Coder-1.5B</td><td>≈ 1.5 GB</td><td>Laptops, CI, quick questions</td></tr>
+<tr><td><strong>Pharo-Coder 1.0 3B</strong></td><td>Qwen2.5-Coder-3B</td><td>≈ 2.5 GB</td><td>Laptops, everyday questions and small tasks. <em>Qwen Research license: non-commercial</em></td></tr>
 <tr><td><strong>Pharo-Coder 1.0 7B</strong></td><td>Qwen2.5-Coder-7B</td><td>≈ 5 GB</td><td>Everyday local development (recommended default)</td></tr>
 <tr><td><strong>Pharo-Coder 1.0 14B</strong></td><td>Qwen2.5-Coder-14B</td><td>≈ 9 GB</td><td>Best everyday quality on a single GPU</td></tr>
 <tr><td><strong>Pharo-Coder 1.0 32B</strong></td><td>Qwen2.5-Coder-32B</td><td>≈ 20 GB</td><td>Hard design, refactoring, debugging, long agent tasks</td></tr>

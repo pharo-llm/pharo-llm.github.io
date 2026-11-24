@@ -26,7 +26,7 @@
 <h2>2. Run a model</h2>
 <p><strong>Pharo-Coder 1.0 7B</strong> is the recommended default: it needs about 5 GB of memory with the default 4-bit quantization.</p>
 <div data-quickstart></div>
-<div class="callout"><strong>Which model should I use?</strong>1.5B for laptops, 7B for daily work, 14B or 32B when you have a GPU with 16–24 GB or more. See <a href="/docs/models.html">Models</a>.</div>
+<div class="callout"><strong>Which model should I use?</strong>1.5B or 3B for laptops, 7B for daily work, 14B or 32B when you have a GPU with 16–24 GB or more. See <a href="/docs/models.html">Models</a>.</div>
 <h2>3. Ask for Pharo code</h2>
 <p>Be specific about class names, selectors and behaviour. For example:</p>
 <pre data-lang="bash">ollama run pharo-llm/pharo-coder:7b &#x27;Create a class LimitedStack with new: capacity, push:, pop, top, isEmpty and isFull. push: on a full stack must signal an Error.&#x27;</pre>

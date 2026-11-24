@@ -141,6 +141,7 @@ a.card:hover { border-color: var(--line-strong); box-shadow: var(--shadow); }
 }
 .model-icon--lg { width: 64px; height: 64px; border-radius: 16px; font-size: 20px; }
 .size-1-5b { --g1: #10b981; --g2: #a3e635; }
+.size-3b { --g1: #14b8a6; --g2: #38bdf8; }
 .size-7b { --g1: #6366f1; --g2: #22d3ee; }
 .size-14b { --g1: #8b5cf6; --g2: #ec4899; }
 .size-32b { --g1: #f97316; --g2: #e11d48; }
